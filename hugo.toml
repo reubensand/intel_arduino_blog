@@ -19,3 +19,36 @@ homeIntroContent = """
 I am an Italian Software Engineer with a strong foundation in computer science and a passion for solving complex problems.
 I am interested in a range of topics, including algorithms, distributed systems, databases, and information retrieval.
 """
+
+
+[[params.social]]
+name = "github"
+url = "https://github.com/reubensand"
+
+# Main menu pages
+[[params.menu]]
+name = "home"
+url = "/"
+
+[[params.menu]]
+name = "posts"
+url = "/posts"
+
+[[params.menu]]
+name = "about"
+url = "/about"
+
+# Syntax highligth on code blocks
+[markup]
+[markup.highlight]
+style = 'algol'
+
+# Giscus comments
+[params.giscus]
+enable = false
+repo = "user/repo"
+repoid = "repoId"
+category = "General"
+categoryid = "categoryId"
+mapping = "pathname"
+theme = "preferred_color_scheme"
