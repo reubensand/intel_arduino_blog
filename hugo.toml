@@ -28,15 +28,15 @@ url = "https://github.com/reubensand"
 # Main menu pages
 [[params.menu]]
 name = "home"
-url = "/"
+url = "/intel_arduino_blog"
 
 [[params.menu]]
 name = "posts"
-url = "/posts"
+url = "/intel_arduino_blog/posts"
 
 [[params.menu]]
 name = "about"
-url = "/about"
+url = "/intel_arduino_blog/about"
 
 # Syntax highligth on code blocks
 [markup]
