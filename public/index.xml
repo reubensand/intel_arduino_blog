@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Home on Hi Blog!</title>
-    <link>http://localhost:1313/</link>
+    <link>https://arduino.blogs.org/</link>
     <description>Recent content in Home on Hi Blog!</description>
     <generator>Hugo</generator>
     <language>en-us</language>
     <lastBuildDate>Sun, 07 Jul 2024 15:26:47 -0700</lastBuildDate>
-    <atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://arduino.blogs.org/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>My First Post</title>
-      <link>http://localhost:1313/posts/my-first-post/</link>
+      <link>https://arduino.blogs.org/posts/my-first-post/</link>
       <pubDate>Sun, 07 Jul 2024 15:26:47 -0700</pubDate>
-      <guid>http://localhost:1313/posts/my-first-post/</guid>
+      <guid>https://arduino.blogs.org/posts/my-first-post/</guid>
       <description>Introduction This is bold text, and this is emphasized text.&#xA;Visit the Hugo website!</description>
     </item>
   </channel>
