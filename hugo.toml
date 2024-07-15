@@ -15,9 +15,8 @@ hideHeader = false
 
 # Intro on main page, content is markdown
 homeIntroTitle = 'Hi!'
-homeIntroContent = """
-I am an Italian Software Engineer with a strong foundation in computer science and a passion for solving complex problems.
-I am interested in a range of topics, including algorithms, distributed systems, databases, and information retrieval.
+homeIntroContent = """This is a the website that hosts the blogs for the Arduino projects. This was made with the Hugo
+[Typo](https://github.com/tomfran/typo 'Typo GitHub') theme and hosted using GitHub pages. Click on posts to see the different blog articles!
 """
 
 
