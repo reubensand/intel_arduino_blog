@@ -23,7 +23,7 @@ homeIntroContent = """This is a the website that hosts the blogs for the Arduino
 paginationSize = 100
 
 # hides page controls
-hidePagination: true
+hidePagination = true
 
 [[params.social]]
 name = "github"
