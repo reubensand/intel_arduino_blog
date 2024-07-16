@@ -19,6 +19,11 @@ homeIntroContent = """This is a the website that hosts the blogs for the Arduino
 [Typo](https://github.com/tomfran/typo 'Typo GitHub') theme and hosted using GitHub pages. Click on posts to see the different blog articles!
 """
 
+# posts per page
+paginationSize = 100
+
+# hides page controls
+hidePagination: true
 
 [[params.social]]
 name = "github"
