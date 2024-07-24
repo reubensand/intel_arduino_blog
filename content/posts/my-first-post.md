@@ -2,6 +2,7 @@
 title = 'My First Post'
 date = 2024-07-07T15:26:47-07:00
 draft = false
+hidePagination = true
 +++
 
 ## Introduction

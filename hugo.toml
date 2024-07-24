@@ -30,22 +30,29 @@ name = "github"
 url = "https://github.com/reubensand"
 
 # Main menu pages
+
 [[params.menu]]
 name = "home"
-url = "/intel_arduino_blog"
+url = "/"
+# url = "/intel_arduino_blog/"
 
 [[params.menu]]
 name = "posts"
-url = "/intel_arduino_blog/posts"
+url = "/posts"
+# url = "/intel_arduino_blog/posts"
+
 
 [[params.menu]]
 name = "about"
-url = "/intel_arduino_blog/about"
+url = "/about"
+# url = "/intel_arduino_blog/about"
+
 
 # Syntax highligth on code blocks
 [markup]
 [markup.highlight]
-style = 'algol'
+style = 'arduino'
+
 
 # Giscus comments
 [params.giscus]

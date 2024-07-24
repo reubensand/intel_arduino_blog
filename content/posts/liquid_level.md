@@ -30,7 +30,7 @@ All arduino programs (called sketches) has two functions: a `setup() `, which ru
 
 Let's get started! We'll work from top to bottom to avoid confusion.
 
-```
+```cpp
     #include <PID_v1.h>
 
     double sensorValue;
@@ -43,13 +43,11 @@ Let's get started! We'll work from top to bottom to avoid confusion.
 First we include the PID library, which will do all the PID related calculations for us. Then, we need to declare some variables: two decimals
 (double) to store the reading the level sensor gives and what the PWM should be set to, a string to hold whatever gets entered into the serial
 monitor, and two numbers that describe what pin is doing what on the physical board.
-```
-    /_---------------Tuning Variables---------------_/
+```cpp
     double Kp = 50; //Proportional Gain
     double Ki = 1; //Integral Constant
     double Kd = 0; //Derivative Constant
     double level = 6; //Set Point (3-12 cm)
-    /_---------------Tuning Variables---------------_/
 ```
 double setPoint = 19.5 \* (level) + 462; //Internal setPoint
 PID myPID(&sensorValue, &output, &setPoint, Kp, Ki, Kd, DIRECT);
@@ -57,7 +55,7 @@ PID myPID(&sensorValue, &output, &setPoint, Kp, Ki, Kd, DIRECT);
 Next we have the 3 PID variables, as well as the level we want the water to remain, all stored as decimal numbers. Underneath those lines, we do
 a conversion to express the desired water level we set earlier to units that match the level sensor’s output. Last we instantiate (create) a
 version of the PID class and include the addresses of all the variables we created as arguments.
-```
+```cpp
     void setup (){
     Serial.begin(9600);
     pinMode(outputPin, OUTPUT);
@@ -69,9 +67,9 @@ version of the PID class and include the addresses of all the variables we creat
 Our setup function only requires a few things. We need to start the serial monitor so we can visualize whatever data we need and input our desired level. Then we can use the built in pinMode function to tell the Arduino whether the pin should be reading data or writing data, using our variables from earlier. We also want to tell the PID class to adjust our output automatically, and set the limits of the output to correspond with a PWM signal, which ranges from 128 to 255. The lower bound is 128 not 0 because the pump motor won’t turn on under that value, and since water is constantly leaving the cup, the pump should always be on.
 
 Now to the meat of the program, the loop function.
-```
+```cpp
     void loop (){
-    /_---------------PID Control---------------_/
+    /*---------------PID Control---------------*/
     sensorValue = analogRead(sensorPin); //Read the value from the sensor
     myPID.Compute(); //PID computes output PWM
     analogWrite(outputPin, output); //Update PWM output value
