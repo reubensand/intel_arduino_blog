@@ -1,6 +1,6 @@
-baseURL = "https://arduino.blogs.org/"
+baseURL = "https://reubensand.github.io/intel_arduino_blog/"
 languageCode = "en-us"
-title = "Hi Blog!"
+title = "Hello!"
 theme = "typo"
 
 [params]
@@ -10,7 +10,7 @@ description = "A blog about arduino projects"
 
 # Appearance settings
 theme = 'auto'
-colorPalette = 'default'
+colorPalette = 'eink'
 hideHeader = false
 
 # Intro on main page, content is markdown
@@ -33,25 +33,31 @@ url = "https://github.com/reubensand"
 
 [[params.menu]]
 name = "home"
-url = "/"
-# url = "/intel_arduino_blog/"
+url = "/intel_arduino_blog/"
 
 [[params.menu]]
 name = "posts"
-url = "/posts"
-# url = "/intel_arduino_blog/posts"
+url = "/intel_arduino_blog/posts"
 
 
 [[params.menu]]
 name = "about"
-url = "/about"
-# url = "/intel_arduino_blog/about"
+url = "/intel_arduino_blog/about"
 
 
 # Syntax highligth on code blocks
 [markup]
 [markup.highlight]
 style = 'arduino'
+hl_Lines = "2,4-5"
+noClasses = true
+guessSyntax = false
+lineNos = true
+lineNoStart = 1
+lineNumbersInTable = true
+tabWidth = 4
+
+
 
 
 # Giscus comments
