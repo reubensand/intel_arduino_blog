@@ -142,13 +142,13 @@
     
 </figure></p>
 <p>The actual MAX31865 chip is a tiny integrated circuit while the board contains all the other components necessary to make it function. It also has several pins that make connecting to the board simple.</p>
-<p><strong>Power Pins</strong></p>
+<h3 id="power-pins">Power Pins</h3>
 <ul>
 <li>Vin: The chips need 3V DC to operate, but an onboard voltage regulator allows up to 5V to allow common 5V microcontrollers (Arduinos) to connected smoothly.</li>
 <li>GND: The common ground pin</li>
 <li>3V3: This ouputs 3.3V and up to 100mA of current to be drawn. Not needed for basic temperature sensing.</li>
 </ul>
-<p><strong>SPI Logic Pins</strong></p>
+<h3 id="spi-logic-pins">SPI Logic Pins</h3>
 <ul>
 <li>CLK: The <em>clock</em> pin for SPI</li>
 <li>SDO: <strong>S</strong>erial <strong>D</strong>ata <strong>O</strong>ut, also known as Microcontroller In Sensor Out, used for data sent from the <em>MAX</em> to the <em>Arduino</em></li>
@@ -219,6 +219,260 @@ By default the board is set up for the 4 wire sensor, but the 2 and 3 wire set u
 <li>Leave the 3 pad jumper untouched</li>
 </ul>
 <h1 id="board-assembly">Board Assembly</h1>
+<p><strong>Let&rsquo;s add the parts to the board</strong>
+The header strip is easiest to connect using a breadboard. Be sure to insert the <strong>long pins down</strong>.</p>
+<p>
+
+
+
+
+
+
+
+
+
+
+<figure class="">
+
+    <div>
+        <img loading="lazy" alt="connector pins" src=" /intel_arduino_blog/images/solder_pins.jpg">
+    </div>
+
+    
+</figure></p>
+<p>Solder all pins for the most consistent electrical contact. If you need help soldering, Adafruit published an excellent guide
+<a href="https://learn.adafruit.com/adafruit-guide-excellent-soldering">here.</a></p>
+<p>In the included picture, the two 3.5mm terminal blocks used to connect the sensor to the board came soldered on. If your board looks like this
+
+
+
+
+
+
+
+
+
+
+
+<figure class="">
+
+    <div>
+        <img loading="lazy" alt="complete" src=" /intel_arduino_blog/images/complete_v2.jpg">
+    </div>
+
+    
+</figure></p>
+<p>Note, I have the 3 wire version of the PT100 so my soldering is done accordingly.
+(You can also see how I originally messed up the &ldquo;24 3&rdquo; pad, but after some cutting and resoldering, it works!)</p>
+<h1 id="wires">Wires</h1>
+<p>Why have the extra wire or two? Improved accuracy. In order to obtain very precise readings of low resistance, the resistance of the wire connecting the piece of platinum to the board must also be accounted for, since it could be a couple ohms, resulting in up to a degree celsius change. By having that extra wire, we can measure the resistance of the leads and subtract that from our total measured resistance. If you want more information Omega has a good explanation <a href="https://www.omega.com/en-us/resources/rtd-2-3-4-wire-connections">here.</a></p>
+<p>
+
+
+
+
+
+
+
+
+
+
+<figure class="">
+
+    <div>
+        <img loading="lazy" alt="wire resistance" src=" /intel_arduino_blog/images/three_wires.jpg">
+    </div>
+
+    
+</figure></p>
+<p>You can see the difference in resistances between the wires in the 3-wire PT100 configuration.
+For example, if the total measrued resistance is 104 ohms, the 2 ohms would be subtracted to get that the real resistance of the platinum is 102 ohms.</p>
+<h3 id="wiring-it-up">Wiring it Up!</h3>
+<p><strong>4 Wires</strong>
+Typically, the wire that connect together have matching colors, but to double check connect a multimeter to see which ones are actually <em>pairs</em>.
+Then, insert one pair of matching wires into one terminal and the same with the other pair. It doesn&rsquo;t matter which wire of the <em>pair</em> goes on the inside or outside. Use a 2.4 mm flathead screwdriver to</p>
+<p>
+
+
+
+
+
+
+
+
+
+
+<figure class="">
+
+    <div>
+        <img loading="lazy" alt="complete four wire" src=" /intel_arduino_blog/images/four_wired.jpg">
+    </div>
+
+    
+</figure></p>
+<p>You should not have soldered any of the jumper so your final board should look similar to this.</p>
+<p><strong>3 Wires</strong>
+Again, check to make sure the matching colors have around a 2 ohm between them. This time insert the <em>matching pair</em> in the right terminal with the <strong>F+</strong> label in between the terminal and the punch hole. The solo wire should be placed in the other terminal, in either slot.</p>
+<p>
+
+
+
+
+
+
+
+
+
+
+<figure class="">
+
+    <div>
+        <img loading="lazy" alt="complete three wire" src=" /intel_arduino_blog/images/three_wired.jpg">
+    </div>
+
+    
+</figure></p>
+<p>You should have soldered the &ldquo;2/3 Wire&rdquo; jump pad and the right two pads of the jumper with the directly flower to the right.</p>
+<p><strong>2 Wire</strong>
+This is the simplest. Just place both wires in one of the terminal. Then either solder closed the jumpers next to the RTD terminal block or put little wires in the right and left terminal blocks to short them together.</p>
+<h1 id="arduino-connection">Arduino Connection</h1>
+<h3 id="spi-wiring">SPI Wiring</h3>
+<p>On an Arduino board:</p>
+<ul>
+<li>Connect <strong>Vin</strong> to the 5V or 3V power pin, for most Arduinos the 5V works well.</li>
+<li>Connect <strong>GND</strong> to a command ground pin, also labeled <strong>GND</strong></li>
+<li>Connect <strong>CLK</strong> to <strong>Digital #13</strong></li>
+<li>Connect <strong>SDO</strong> to <strong>Digital #12</strong></li>
+<li>Connect <strong>SDI</strong> to <strong>Digital #11</strong></li>
+<li>Connect <strong>CS</strong> to <strong>Digital #10</strong></li>
+</ul>
+<p>
+
+
+
+
+
+
+
+
+
+
+<figure class="">
+
+    <div>
+        <img loading="lazy" alt="complete wiring" src=" /intel_arduino_blog/images/final_product.jpg">
+    </div>
+
+    
+</figure></p>
+<p>Other digital pins can be used, as long as the code reflects the changes. You&rsquo;ll see what I mean when we look at the library.</p>
+<h3 id="download-adafruit_max31865-library">Download Adafruit_MAX31865 Library</h3>
+<p>In the Arduino IDE, open up the library manager:</p>
+<p>
+
+
+
+
+
+
+
+
+
+
+<figure class="">
+
+    <div>
+        <img loading="lazy" alt="library manager" src=" /intel_arduino_blog/images/library_manager_menu.png">
+    </div>
+
+    
+</figure></p>
+<p>Search for the Adafruit MAX31865 library:</p>
+<p>
+
+
+
+
+
+
+
+
+
+
+<figure class="">
+
+    <div>
+        <img loading="lazy" alt="search bar" src=" /intel_arduino_blog/images/search_max31865.png">
+    </div>
+
+    
+</figure></p>
+<p>Click <strong>Install</strong>!</p>
+<p>Alternatively, in Platformio add the following line under the <code>[env:]</code> section of the platformio.ini file:</p>
+<pre tabindex="0"><code>lib_deps = adafruit/Adafruit MAX31865 library@^1.6.2
+</code></pre><p>This will autmatically install the library for you!</p>
+<h3 id="run-example">Run Example</h3>
+<p>In the Arduino IDE, go to <strong>File-&gt;Examples-&gt;Adaruit MAX31865 library-&gt;max31865</strong>
+The example file should pop up.</p>
+<p>
+
+
+
+
+
+
+
+
+
+
+<figure class="">
+
+    <div>
+        <img loading="lazy" alt="load demo" src=" /intel_arduino_blog/images/load_demo.png">
+    </div>
+
+    
+</figure></p>
+<p>The example can also be accessed in Platformio under the following filepath:
+<strong>.pio-&gt;libdeps-&gt;board_name-&gt;Adafruit MAX31865 library-&gt;examples-&gt;max31865-&gt;max31865.ino</strong></p>
+<p>
+
+
+
+
+
+
+
+
+
+
+<figure class="">
+
+    <div>
+        <img loading="lazy" alt="load demo" src=" /intel_arduino_blog/images/example_platformio.png">
+    </div>
+
+    
+</figure></p>
+<p>You can also download this file [here].</p>
+<p>Right underneath, the instantiation of the class, two <code>#define</code> are made. It&rsquo;s important to change those accordingly based on if you are using the PT100 or PT1000. For the PT100 my section looks like this:</p>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#95a5a6">// The value of the Rref resistor. Use 430.0 for PT100 and 4300.0 for PT1000
+</span></span></span><span style="display:flex;"><span><span style="color:#95a5a6"></span><span style="color:#728e00">#define RREF      430.0
+</span></span></span><span style="display:flex;"><span><span style="color:#728e00"></span><span style="color:#95a5a6">// The &#39;nominal&#39; 0-degrees-C resistance of the sensor
+</span></span></span><span style="display:flex;"><span><span style="color:#95a5a6">// 100.0 for PT100, 1000.0 for PT1000
+</span></span></span><span style="display:flex;"><span><span style="color:#95a5a6"></span><span style="color:#728e00">#define RNOMINAL  100.0
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>Now you can upload your code, open the serial monitor, and hopefully your temperature readings will be displayed every second!</p>
 
     
   </div>
