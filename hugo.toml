@@ -1,6 +1,5 @@
 baseURL = "https://reubensand.github.io/intel_arduino_blog/"
 languageCode = "en-us"
-title = "Hello!"
 theme = "typo"
 
 [params]
@@ -39,17 +38,10 @@ url = "/intel_arduino_blog/"
 name = "posts"
 url = "/intel_arduino_blog/posts"
 
-
-[[params.menu]]
-name = "about"
-url = "/intel_arduino_blog/about"
-
-
 # Syntax highligth on code blocks
 [markup]
 [markup.highlight]
 style = 'arduino'
-hl_Lines = "2,4-5"
 noClasses = true
 guessSyntax = false
 lineNos = true

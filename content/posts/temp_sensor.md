@@ -1,30 +1,32 @@
 +++
-title = 'MAX31865 and PT100 RTD'
+title = 'How to Measure Temperature Using An Arduino and RTD'
 date = 2024-07-25T10:58:28-07:00
 draft = false
+author = "Reuben De Souza"
 +++
 
-This article will show you how to set up the PT100 Resistance Temperature Detector (RTD) with the **MAX31865** Sensor Amplifier.
+// Insert Top level image
 
-# Basic Principles
+# What is an RTD
 
-RTDs contain a resistor that changes its resistance as the temperature flucuates. In the PT100, the resistor is a small strip of platinum, which will have a resistance of 100 ohms at 0 degrees celsius, which explains the name. Adafruit has a PT1000 that will have a resistance of 1000 ohms at 0 degrees C. The difference between the two is accuracy, since the same change in tempereature will cause a larger change in resistance on the PT1000, it will be more accurate. However, Platinum RTD's are inherently accurate so saving a few dollars by getting the PT100 will have little affect for most projects.
+A _Resistance Temperature Dectector_ (RTD) is a simple sensor whose resistance changes as its temperature changes. The RTD we will be using today is the [PT100](https://www.adafruit.com/product/3290), from a well respected hardware company, _Adafruit_. The **PT** indicates that the "resistor" inside is just a small strip of platinum, and the **100** indicates at 0 degrees celsius the platinum will have a resistance of 100 ohms. Platinum is used in the resistor because it is stable, provides repeatable results, and boasts a broad temperature range.
 
-If we just attached our RTD to an Arduino, we wouldn't have a good way to measure the changes. Therefore, we need an amplifier to get the best accurary out of the probe. Adafruit's MAX31865 will not only amplify the signal, but also regulate other factors that go a bit beyond the scope of this article. Some RTD's also have more that the two wires that help account for lost voltage and improve accuracy; the one in the article has 3 wires, and the MAX amplifier can make use of this. To talk to the Arduino, the board uses the standard serial peripheral interface (SPI) and can be powered with 3V-5V, and can provide 3.3V for up to 100 mA as well.
+The method to calculate the resistance of the platinum is slightly more complicated than applying a voltage, measuring the corresponding current, then using Ohm's Law `R = V/I` to solve for `R`. Instead, a second reference resistor (RREF) is placed in series with the RTD. A voltage is applied to the pair, and the voltage of each individual resistor is measured. The ratio of these two voltages, which also respresent the ratio of resistance since the current is constant, can be multiplied by the known RREF to obtain the RTD's resistance. This process allows for accurate readings at low resistances, and small changes in resistance, improving the accuracy significantly. To accomplish this, a separate chip is necessary: Adafruit's [MAX31865](https://www.adafruit.com/product/3328). This board includes the required chip to do this measurement process, and the required peripherals to talk to the Arduino in a digitally. To find out more about the process consult page 10 of the [datasheet](https://learn.adafruit.com/adafruit-max31865-rtd-pt100-amplifier/downloads), which also contains all the information about the board.
 
 # Pinout
 
-![pinout](/intel_arduino_blog/images/board_pinouts.jpg)
+![pinout](/intel_arduino_blog/images/top_down_board.jpg)
 
-The actual MAX31865 chip is a tiny integrated circuit while the board contains all the other components necessary to make it function. It also has several pins that make connecting to the board simple.
+The black box in the middle is the actual chip. The RREF is also labeled clearly.
 
-### Power Pins
+### To connect to an Arduino we need to use the following pins:
 
--   Vin: The chips need 3V DC to operate, but an onboard voltage regulator allows up to 5V to allow common 5V microcontrollers (Arduinos) to connected smoothly.
+#### Power Pins
+
+-   VIN: (**V**oltage **In**), the board needs 3V DC to operate, but an onboard voltage regulator allows for an Arduino's 5V power pin to connect
 -   GND: The common ground pin
--   3V3: This ouputs 3.3V and up to 100mA of current to be drawn. Not needed for basic temperature sensing.
 
-### SPI Logic Pins
+#### SPI Logic Pins
 
 -   CLK: The _clock_ pin for SPI
 -   SDO: **S**erial **D**ata **O**ut, also known as Microcontroller In Sensor Out, used for data sent from the _MAX_ to the _Arduino_
@@ -32,8 +34,6 @@ The actual MAX31865 chip is a tiny integrated circuit while the board contains a
 -   CS: **C**hip **S**elect, when low the MAX chip is active
 
 Connecting multiple MAX31865's or other SPI devices? Have them share a CLK, SDO, and SDI pins but keep seperate CS pins and only activate one chip at a time.
-
--   RDY: the data-**ready** indicator pin, can be used to speed up reads for custom drivers. Adafruit's Arduino library doesn't make use of this pin.
 
 # Sensor Terminal Blocks and Configuration Jumpers
 
@@ -93,8 +93,6 @@ For example, if the total measrued resistance is 104 ohms, the 2 ohms would be s
 Typically, the wire that connect together have matching colors, but to double check connect a multimeter to see which ones are actually _pairs_.
 Then, insert one pair of matching wires into one terminal and the same with the other pair. It doesn't matter which wire of the _pair_ goes on the inside or outside. Use a 2.4 mm flathead screwdriver to
 
-![complete four wire](/intel_arduino_blog/images/four_wired.jpg)
-
 You should not have soldered any of the jumper so your final board should look similar to this.
 
 **3 Wires**
@@ -119,8 +117,6 @@ On an Arduino board:
 -   Connect **SDO** to **Digital #12**
 -   Connect **SDI** to **Digital #11**
 -   Connect **CS** to **Digital #10**
-
-![complete wiring](/intel_arduino_blog/images/final_product.jpg)
 
 Other digital pins can be used, as long as the code reflects the changes. You'll see what I mean when we look at the library.
 

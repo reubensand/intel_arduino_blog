@@ -8,7 +8,7 @@
 
 <title>
     
-    How to Measure Temperature Using An Arduino and RTD | 
+    Setting Up the PT100 and MAX31865 amplifier | 
     
 </title>
 
@@ -23,7 +23,7 @@
 
 
 
-<link rel="stylesheet" href="/intel_arduino_blog/assets/combined.min.d4a94df2de603f2d83f38bb9bc29139ffe7ac2ca006956de2d78e7d883fb80db.css" media="all">
+<link rel="stylesheet" href="/intel_arduino_blog/assets/combined.min.1ddff9327769427ec3c5a9b8c4457be6d1be407395881ad400dd674e4dc37aaf.css" media="all">
 
 
 
@@ -85,16 +85,8 @@
 
     
 
-    <h1 class="single-title">How to Measure Temperature Using An Arduino and RTD</h1>
+    <h1 class="single-title">Setting Up the PT100 and MAX31865 amplifier</h1>
     
-
-    
-    
-    <div class="single-author">
-      
-        <p>By: Reuben De Souza</p>
-      
-    </div>
 
     
 
@@ -119,10 +111,10 @@
   
 
   <div class="single-content">
-    <p>// Insert Top level image</p>
-<h1 id="what-is-an-rtd">What is an RTD</h1>
-<p>A <em>Resistance Temperature Dectector</em> (RTD) is a simple sensor whose resistance changes as its temperature changes. The RTD we will be using today is the <a href="https://www.adafruit.com/product/3290">PT100</a>, from a well respected hardware company, <em>Adafruit</em>. The <strong>PT</strong> indicates that the &ldquo;resistor&rdquo; inside is just a small strip of platinum, and the <strong>100</strong> indicates at 0 degrees celsius the platinum will have a resistance of 100 ohms. Platinum is used in the resistor because it is stable, provides repeatable results, and boasts a broad temperature range.</p>
-<p>The method to calculate the resistance of the platinum is slightly more complicated than applying a voltage, measuring the corresponding current, then using Ohm&rsquo;s Law <code>R = V/I</code> to solve for <code>R</code>. Instead, a second reference resistor (RREF) is placed in series with the RTD. A voltage is applied to the pair, and the voltage of each individual resistor is measured. The ratio of these two voltages, which also respresent the ratio of resistance since the current is constant, can be multiplied by the known RREF to obtain the RTD&rsquo;s resistance. This process allows for accurate readings at low resistances, and small changes in resistance, improving the accuracy significantly. To accomplish this, a separate chip is necessary: Adafruit&rsquo;s <a href="https://www.adafruit.com/product/3328">MAX31865</a>. This board includes the required chip to do this measurement process, and the required peripherals to talk to the Arduino in a digitally. To find out more about the process consult page 10 of the <a href="https://learn.adafruit.com/adafruit-max31865-rtd-pt100-amplifier/downloads">datasheet</a>, which also contains all the information about the board.</p>
+    <p>This article will show you how to set up the PT100 Resistance Temperature Detector (RTD) with the <strong>MAX31865</strong> Sensor Amplifier.</p>
+<h1 id="basic-principles">Basic Principles</h1>
+<p>RTDs contain a resistor that changes its resistance as the temperature flucuates. In the PT100, the resistor is a small strip of platinum, which will have a resistance of 100 ohms at 0 degrees celsius, which explains the name. Adafruit has a PT1000 that will have a resistance of 1000 ohms at 0 degrees C. The difference between the two is accuracy, since the same change in tempereature will cause a larger change in resistance on the PT1000, it will be more accurate. However, Platinum RTD&rsquo;s are inherently accurate so saving a few dollars by getting the PT100 will have little affect for most projects.</p>
+<p>If we just attached our RTD to an Arduino, we wouldn&rsquo;t have a good way to measure the changes. Therefore, we need an amplifier to get the best accurary out of the probe. Adafruit&rsquo;s MAX31865 will not only amplify the signal, but also regulate other factors that go a bit beyond the scope of this article. Some RTD&rsquo;s also have more that the two wires that help account for lost voltage and improve accuracy; the one in the article has 3 wires, and the MAX amplifier can make use of this. To talk to the Arduino, the board uses the standard serial peripheral interface (SPI) and can be powered with 3V-5V, and can provide 3.3V for up to 100 mA as well.</p>
 <h1 id="pinout">Pinout</h1>
 <p>
 
@@ -138,19 +130,19 @@
 <figure class="">
 
     <div>
-        <img loading="lazy" alt="pinout" src=" /intel_arduino_blog/images/top_down_board.jpg">
+        <img loading="lazy" alt="pinout" src=" /intel_arduino_blog/images/board_pinouts.jpg">
     </div>
 
     
 </figure></p>
-<p>The black box in the middle is the actual chip. The RREF is also labeled clearly.</p>
-<h3 id="to-connect-to-an-arduino-we-need-to-use-the-following-pins">To connect to an Arduino we need to use the following pins:</h3>
-<h4 id="power-pins">Power Pins</h4>
+<p>The actual MAX31865 chip is a tiny integrated circuit while the board contains all the other components necessary to make it function. It also has several pins that make connecting to the board simple.</p>
+<h3 id="power-pins">Power Pins</h3>
 <ul>
-<li>VIN: (<strong>V</strong>oltage <strong>In</strong>), the board needs 3V DC to operate, but an onboard voltage regulator allows for an Arduino&rsquo;s 5V power pin to connect</li>
+<li>Vin: The chips need 3V DC to operate, but an onboard voltage regulator allows up to 5V to allow common 5V microcontrollers (Arduinos) to connected smoothly.</li>
 <li>GND: The common ground pin</li>
+<li>3V3: This ouputs 3.3V and up to 100mA of current to be drawn. Not needed for basic temperature sensing.</li>
 </ul>
-<h4 id="spi-logic-pins">SPI Logic Pins</h4>
+<h3 id="spi-logic-pins">SPI Logic Pins</h3>
 <ul>
 <li>CLK: The <em>clock</em> pin for SPI</li>
 <li>SDO: <strong>S</strong>erial <strong>D</strong>ata <strong>O</strong>ut, also known as Microcontroller In Sensor Out, used for data sent from the <em>MAX</em> to the <em>Arduino</em></li>
@@ -158,6 +150,9 @@
 <li>CS: <strong>C</strong>hip <strong>S</strong>elect, when low the MAX chip is active</li>
 </ul>
 <p>Connecting multiple MAX31865&rsquo;s or other SPI devices? Have them share a CLK, SDO, and SDI pins but keep seperate CS pins and only activate one chip at a time.</p>
+<ul>
+<li>RDY: the data-<strong>ready</strong> indicator pin, can be used to speed up reads for custom drivers. Adafruit&rsquo;s Arduino library doesn&rsquo;t make use of this pin.</li>
+</ul>
 <h1 id="sensor-terminal-blocks-and-configuration-jumpers">Sensor Terminal Blocks and Configuration Jumpers</h1>
 <p>
 
@@ -290,6 +285,25 @@ For example, if the total measrued resistance is 104 ohms, the 2 ohms would be s
 <p><strong>4 Wires</strong>
 Typically, the wire that connect together have matching colors, but to double check connect a multimeter to see which ones are actually <em>pairs</em>.
 Then, insert one pair of matching wires into one terminal and the same with the other pair. It doesn&rsquo;t matter which wire of the <em>pair</em> goes on the inside or outside. Use a 2.4 mm flathead screwdriver to</p>
+<p>
+
+
+
+
+
+
+
+
+
+
+<figure class="">
+
+    <div>
+        <img loading="lazy" alt="complete four wire" src=" /intel_arduino_blog/images/four_wired.jpg">
+    </div>
+
+    
+</figure></p>
 <p>You should not have soldered any of the jumper so your final board should look similar to this.</p>
 <p><strong>3 Wires</strong>
 Again, check to make sure the matching colors have around a 2 ohm between them. This time insert the <em>matching pair</em> in the right terminal with the <strong>F+</strong> label in between the terminal and the punch hole. The solo wire should be placed in the other terminal, in either slot.</p>
@@ -326,6 +340,25 @@ This is the simplest. Just place both wires in one of the terminal. Then either 
 <li>Connect <strong>SDI</strong> to <strong>Digital #11</strong></li>
 <li>Connect <strong>CS</strong> to <strong>Digital #10</strong></li>
 </ul>
+<p>
+
+
+
+
+
+
+
+
+
+
+<figure class="">
+
+    <div>
+        <img loading="lazy" alt="complete wiring" src=" /intel_arduino_blog/images/final_product.jpg">
+    </div>
+
+    
+</figure></p>
 <p>Other digital pins can be used, as long as the code reflects the changes. You&rsquo;ll see what I mean when we look at the library.</p>
 <h3 id="download-adafruit_max31865-library">Download Adafruit_MAX31865 Library</h3>
 <p>In the Arduino IDE, open up the library manager:</p>
