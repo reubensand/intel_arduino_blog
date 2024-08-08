@@ -23,7 +23,7 @@
 
 
 
-<link rel="stylesheet" href="/intel_arduino_blog/assets/combined.min.d4a94df2de603f2d83f38bb9bc29139ffe7ac2ca006956de2d78e7d883fb80db.css" media="all">
+<link rel="stylesheet" href="/intel_arduino_blog/assets/combined.min.1ddff9327769427ec3c5a9b8c4457be6d1be407395881ad400dd674e4dc37aaf.css" media="all">
 
 
 
@@ -122,7 +122,8 @@
     <p>// Insert Top level image</p>
 <h1 id="what-is-an-rtd">What is an RTD</h1>
 <p>A <em>Resistance Temperature Dectector</em> (RTD) is a simple sensor whose resistance changes as its temperature changes. The RTD we will be using today is the <a href="https://www.adafruit.com/product/3290">PT100</a>, from a well respected hardware company, <em>Adafruit</em>. The <strong>PT</strong> indicates that the &ldquo;resistor&rdquo; inside is just a small strip of platinum, and the <strong>100</strong> indicates at 0 degrees celsius the platinum will have a resistance of 100 ohms. Platinum is used in the resistor because it is stable, provides repeatable results, and boasts a broad temperature range.</p>
-<p>The method to calculate the resistance of the platinum is slightly more complicated than applying a voltage, measuring the corresponding current, then using Ohm&rsquo;s Law <code>R = V/I</code> to solve for <code>R</code>. Instead, a second reference resistor (RREF) is placed in series with the RTD. A voltage is applied to the pair, and the voltage of each individual resistor is measured. The ratio of these two voltages, which also respresent the ratio of resistance since the current is constant, can be multiplied by the known RREF to obtain the RTD&rsquo;s resistance. This process allows for accurate readings at low resistances, and small changes in resistance, improving the accuracy significantly. To accomplish this, a separate chip is necessary: Adafruit&rsquo;s <a href="https://www.adafruit.com/product/3328">MAX31865</a>. This board includes the required chip to do this measurement process, and the required peripherals to talk to the Arduino in a digitally. To find out more about the process consult page 10 of the <a href="https://learn.adafruit.com/adafruit-max31865-rtd-pt100-amplifier/downloads">datasheet</a>, which also contains all the information about the board.</p>
+<p>// insert RTD picture</p>
+<p>The method to calculate the resistance of the platinum is slightly more complicated than applying a voltage, measuring the corresponding current, then using Ohm&rsquo;s Law <code>R = V/I</code> to solve for <code>R</code>. Instead, a second reference resistor (RREF) is placed in series with the RTD. A voltage is applied to the pair, and the voltage of each individual resistor is measured. The ratio of these two voltages, which also respresents the ratio of resistance due to the constant current, can be multiplied by the known RREF to obtain the RTD&rsquo;s resistance. This process allows for accurate readings at low resistances, and recognizes small changes in resistance, improving the accuracy significantly. To accomplish this, a separate chip is necessary: Adafruit&rsquo;s <a href="https://www.adafruit.com/product/3328">MAX31865 Amplifier</a>. This amplifier includes the required chip to do the above measurement process, and the peripherals to communicate its reading to the Arduino using Serial Peripheral Interface <a href="https://learn.sparkfun.com/tutorials/serial-peripheral-interface-spi/all">(SPI)</a>. SPI is a standardized way to use the <a href="https://learn.sparkfun.com/tutorials/serial-communication/all">Serial</a> communication method, which makes talking to different external chips simple and customary. To find out more about the amplifier consult the <a href="https://learn.adafruit.com/adafruit-max31865-rtd-pt100-amplifier/downloads">datasheet</a>.</p>
 <h1 id="pinout">Pinout</h1>
 <p>
 
@@ -143,23 +144,24 @@
 
     
 </figure></p>
-<p>The black box in the middle is the actual chip. The RREF is also labeled clearly.</p>
+<p>The black box in the middle is the actual chip (also known as an integrated circuit). All the other parts are used to support the chip&rsquo;s functions, such as the reference resistor, labeled <em>RREF</em>.</p>
 <h3 id="to-connect-to-an-arduino-we-need-to-use-the-following-pins">To connect to an Arduino we need to use the following pins:</h3>
 <h4 id="power-pins">Power Pins</h4>
 <ul>
-<li>VIN: (<strong>V</strong>oltage <strong>In</strong>), the board needs 3V DC to operate, but an onboard voltage regulator allows for an Arduino&rsquo;s 5V power pin to connect</li>
-<li>GND: The common ground pin</li>
+<li>VIN: (<strong>V</strong>oltage <strong>In</strong>), the board needs 3V DC to operate, but an onboard voltage regulator allows for an Arduino&rsquo;s 5V power pin to connect seamlessly</li>
+<li>GND: The ground pin, a feature for every circuit</li>
 </ul>
 <h4 id="spi-logic-pins">SPI Logic Pins</h4>
 <ul>
-<li>CLK: The <em>clock</em> pin for SPI</li>
-<li>SDO: <strong>S</strong>erial <strong>D</strong>ata <strong>O</strong>ut, also known as Microcontroller In Sensor Out, used for data sent from the <em>MAX</em> to the <em>Arduino</em></li>
-<li>SDI: <strong>S</strong>erial <strong>D</strong>ata <strong>I</strong>n, also known as Microcontroller Out Sensor In, used for data sent from the <em>Arduino</em> to the <em>MAX</em></li>
-<li>CS: <strong>C</strong>hip <strong>S</strong>elect, when low the MAX chip is active</li>
+<li>CLK: The <strong>Cl</strong>oc<strong>k</strong> pin, vital to any communication protocol</li>
+<li>SDO: <strong>S</strong>erial <strong>D</strong>ata <strong>O</strong>ut, also known as Microcontroller In Sensor Out, used for data sent from the <em>amplifier</em> to the <em>Arduino</em></li>
+<li>SDI: <strong>S</strong>erial <strong>D</strong>ata <strong>I</strong>n, also known as Microcontroller Out Sensor In, used for data sent from the <em>Arduino</em> to the <em>amplifier</em></li>
+<li>CS: <strong>C</strong>hip <strong>S</strong>elect, when low the amplifier is active</li>
 </ul>
-<p>Connecting multiple MAX31865&rsquo;s or other SPI devices? Have them share a CLK, SDO, and SDI pins but keep seperate CS pins and only activate one chip at a time.</p>
-<h1 id="sensor-terminal-blocks-and-configuration-jumpers">Sensor Terminal Blocks and Configuration Jumpers</h1>
-<p>
+<p>These 4 pins are the heart of the SPI protocol and are all we need, besides power and ground to communicate between the amplifier and Arduino.</p>
+<h1 id="configuring-the-board">Configuring the board</h1>
+<p>By default the board is set up for the 4 wire sensor. Since our PT100 only has 3 wires, a little soldering is necessary to configure thecircuits correctly. For those unfamiliar with soldering, its purpose is to make electrical connections that are a little more permanat than twisting two wires together. I&rsquo;d recomend looking at a tutorial and practicing on some spare parts before attempting the real board. Here&rsquo;s a guide that might <a href="https://learn.adafruit.com/adafruit-guide-excellent-soldering">help</a>
+
 
 
 
@@ -173,53 +175,26 @@
 <figure class="">
 
     <div>
-        <img loading="lazy" alt="terminals" src=" /intel_arduino_blog/images/board_terminals.jpg">
+        <img loading="lazy" alt="jumpers" src=" /intel_arduino_blog/images/top_down_board.jpg">
     </div>
 
     
 </figure></p>
-<p>There are <em>four</em> contacts that connect the RTD sensors to the board. All contacts don&rsquo;t need to be used since the board supports 2, 3, or 4 wire sensors. Additionally, the 3 and 4 wire sensor can be used as a 3 or 2 wire sensor by not connecting the extra wires, only sacrificing a little accurary.</p>
-<p>
-
-
-
-
-
-
-
-
-
-
-<figure class="">
-
-    <div>
-        <img loading="lazy" alt="jumpers" src=" /intel_arduino_blog/images/board_jumpers.jpg">
-    </div>
-
-    
-</figure>
-By default the board is set up for the 4 wire sensor, but the 2 and 3 wire set up only requires a little soldering.</p>
-<p><strong>3-wire</strong></p>
+<p>There are three jump pads that could be configured, we need to do the following:</p>
 <ul>
 <li>Solder closed the jumper labeled <strong>2/3 Wire</strong></li>
 <li>Leave jumper labeled <strong>2 Wire</strong> untouched</li>
-<li>Cut the small tab in between the <em>2</em> and <em>4</em> on the last jumper, then solder the rigthmost and middle pads closed.</li>
+<li>Cut the small tab just to the right of the <em>4</em> on the pad labeled &ldquo;24 3&rdquo;, then solder the rigthmost and middle pads closed.</li>
 </ul>
 <p>Tips for 3 pad jumper:</p>
 <ul>
-<li>Cutting the tab can be difficult and does scratch the surrounding area slightly so just be mindful</li>
+<li>Cutting the tab can be difficult and does scratch the surrounding area slightly, but the circuit should still work fine</li>
 <li>Use a small amount of solder when connecting the middle and right pads and have a solder sucker ready in case the left pad accidentely gets connected</li>
 <li>My first time trying to get the solder to lay correctly took quite a bit of trial and error, but just be careful to not overheat the chip</li>
 </ul>
-<p><strong>2-wire</strong></p>
-<ul>
-<li>Solder closed the jumper labeled <strong>2/3 Wire</strong></li>
-<li>solder closed the jumper labeled <strong>2 Wire</strong></li>
-<li>Leave the 3 pad jumper untouched</li>
-</ul>
 <h1 id="board-assembly">Board Assembly</h1>
 <p><strong>Let&rsquo;s add the parts to the board</strong>
-The header strip is easiest to connect using a breadboard. Be sure to insert the <strong>long pins down</strong>.</p>
+The header strip is easiest to solder in using a breadboard. Be sure to insert the <strong>long pins down</strong>.</p>
 <p>
 
 
@@ -239,10 +214,7 @@ The header strip is easiest to connect using a breadboard. Be sure to insert the
 
     
 </figure></p>
-<p>Solder all pins for the most consistent electrical contact. If you need help soldering, Adafruit published an excellent guide
-<a href="https://learn.adafruit.com/adafruit-guide-excellent-soldering">here.</a></p>
-<p>In the included picture, the two 3.5mm terminal blocks used to connect the sensor to the board came soldered on. If your board looks like this
-
+<p>
 
 
 

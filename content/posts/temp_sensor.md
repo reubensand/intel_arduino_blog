@@ -8,71 +8,50 @@ author = "Reuben De Souza"
 // Insert Top level image
 
 # What is an RTD
-
 A _Resistance Temperature Dectector_ (RTD) is a simple sensor whose resistance changes as its temperature changes. The RTD we will be using today is the [PT100](https://www.adafruit.com/product/3290), from a well respected hardware company, _Adafruit_. The **PT** indicates that the "resistor" inside is just a small strip of platinum, and the **100** indicates at 0 degrees celsius the platinum will have a resistance of 100 ohms. Platinum is used in the resistor because it is stable, provides repeatable results, and boasts a broad temperature range.
 
-The method to calculate the resistance of the platinum is slightly more complicated than applying a voltage, measuring the corresponding current, then using Ohm's Law `R = V/I` to solve for `R`. Instead, a second reference resistor (RREF) is placed in series with the RTD. A voltage is applied to the pair, and the voltage of each individual resistor is measured. The ratio of these two voltages, which also respresent the ratio of resistance since the current is constant, can be multiplied by the known RREF to obtain the RTD's resistance. This process allows for accurate readings at low resistances, and small changes in resistance, improving the accuracy significantly. To accomplish this, a separate chip is necessary: Adafruit's [MAX31865](https://www.adafruit.com/product/3328). This board includes the required chip to do this measurement process, and the required peripherals to talk to the Arduino in a digitally. To find out more about the process consult page 10 of the [datasheet](https://learn.adafruit.com/adafruit-max31865-rtd-pt100-amplifier/downloads), which also contains all the information about the board.
+// insert RTD picture
+
+The method to calculate the resistance of the platinum is slightly more complicated than applying a voltage, measuring the corresponding current, then using Ohm's Law `R = V/I` to solve for `R`. Instead, a second reference resistor (RREF) is placed in series with the RTD. A voltage is applied to the pair, and the voltage of each individual resistor is measured. The ratio of these two voltages, which also respresents the ratio of resistance due to the constant current, can be multiplied by the known RREF to obtain the RTD's resistance. This process allows for accurate readings at low resistances, and recognizes small changes in resistance, improving the accuracy significantly. To accomplish this, a separate chip is necessary: Adafruit's [MAX31865 Amplifier](https://www.adafruit.com/product/3328). This amplifier includes the required chip to do the above measurement process, and the peripherals to communicate its reading to the Arduino using Serial Peripheral Interface [(SPI)](https://learn.sparkfun.com/tutorials/serial-peripheral-interface-spi/all). SPI is a standardized way to use the [Serial](https://learn.sparkfun.com/tutorials/serial-communication/all) communication method, which makes talking to different external chips simple and customary. To find out more about the amplifier consult the [datasheet](https://learn.adafruit.com/adafruit-max31865-rtd-pt100-amplifier/downloads).
 
 # Pinout
-
 ![pinout](/intel_arduino_blog/images/top_down_board.jpg)
 
-The black box in the middle is the actual chip. The RREF is also labeled clearly.
+The black box in the middle is the actual chip (also known as an integrated circuit). All the other parts are used to support the chip's functions, such as the reference resistor, labeled _RREF_.
 
 ### To connect to an Arduino we need to use the following pins:
-
 #### Power Pins
-
--   VIN: (**V**oltage **In**), the board needs 3V DC to operate, but an onboard voltage regulator allows for an Arduino's 5V power pin to connect
--   GND: The common ground pin
+-   VIN: (**V**oltage **In**), the board needs 3V DC to operate, but an onboard voltage regulator allows for an Arduino's 5V power pin to connect seamlessly 
+-   GND: The ground pin, a feature for every circuit
 
 #### SPI Logic Pins
+-   CLK: The **Cl**oc**k** pin, vital to any communication protocol
+-   SDO: **S**erial **D**ata **O**ut, also known as Microcontroller In Sensor Out, used for data sent from the _amplifier_ to the _Arduino_
+-   SDI: **S**erial **D**ata **I**n, also known as Microcontroller Out Sensor In, used for data sent from the _Arduino_ to the _amplifier_
+-   CS: **C**hip **S**elect, when low the amplifier is active 
 
--   CLK: The _clock_ pin for SPI
--   SDO: **S**erial **D**ata **O**ut, also known as Microcontroller In Sensor Out, used for data sent from the _MAX_ to the _Arduino_
--   SDI: **S**erial **D**ata **I**n, also known as Microcontroller Out Sensor In, used for data sent from the _Arduino_ to the _MAX_
--   CS: **C**hip **S**elect, when low the MAX chip is active
+These 4 pins are the heart of the SPI protocol and are all we need, besides power and ground to communicate between the amplifier and Arduino. 
 
-Connecting multiple MAX31865's or other SPI devices? Have them share a CLK, SDO, and SDI pins but keep seperate CS pins and only activate one chip at a time.
+# Configuring the board
+By default the board is set up for the 4 wire sensor. Since our PT100 only has 3 wires, a little soldering is necessary to configure thecircuits correctly. For those unfamiliar with soldering, its purpose is to make electrical connections that are a little more permanat than twisting two wires together. I'd recomend looking at a tutorial and practicing on some spare parts before attempting the real board. Here's a guide that might [help](https://learn.adafruit.com/adafruit-guide-excellent-soldering)
+![jumpers](/intel_arduino_blog/images/top_down_board.jpg)
 
-# Sensor Terminal Blocks and Configuration Jumpers
-
-![terminals](/intel_arduino_blog/images/board_terminals.jpg)
-
-There are _four_ contacts that connect the RTD sensors to the board. All contacts don't need to be used since the board supports 2, 3, or 4 wire sensors. Additionally, the 3 and 4 wire sensor can be used as a 3 or 2 wire sensor by not connecting the extra wires, only sacrificing a little accurary.
-
-![jumpers](/intel_arduino_blog/images/board_jumpers.jpg)
-By default the board is set up for the 4 wire sensor, but the 2 and 3 wire set up only requires a little soldering.
-
-**3-wire**
-
--   Solder closed the jumper labeled **2/3 Wire**
--   Leave jumper labeled **2 Wire** untouched
--   Cut the small tab in between the _2_ and _4_ on the last jumper, then solder the rigthmost and middle pads closed.
+There are three jump pads that could be configured, we need to do the following:
+- Solder closed the jumper labeled **2/3 Wire**
+- Leave jumper labeled **2 Wire** untouched
+- Cut the small tab just to the right of the _4_ on the pad labeled "24 3", then solder the rigthmost and middle pads closed.
 
 Tips for 3 pad jumper:
-
--   Cutting the tab can be difficult and does scratch the surrounding area slightly so just be mindful
+-   Cutting the tab can be difficult and does scratch the surrounding area slightly, but the circuit should still work fine
 -   Use a small amount of solder when connecting the middle and right pads and have a solder sucker ready in case the left pad accidentely gets connected
 -   My first time trying to get the solder to lay correctly took quite a bit of trial and error, but just be careful to not overheat the chip
 
-**2-wire**
-
--   Solder closed the jumper labeled **2/3 Wire**
--   solder closed the jumper labeled **2 Wire**
--   Leave the 3 pad jumper untouched
-
 # Board Assembly
-
 **Let's add the parts to the board**
-The header strip is easiest to connect using a breadboard. Be sure to insert the **long pins down**.
+The header strip is easiest to solder in using a breadboard. Be sure to insert the **long pins down**.
 
 ![connector pins](/intel_arduino_blog/images/solder_pins.jpg)
 
-Solder all pins for the most consistent electrical contact. If you need help soldering, Adafruit published an excellent guide
-[here.](https://learn.adafruit.com/adafruit-guide-excellent-soldering)
-
-In the included picture, the two 3.5mm terminal blocks used to connect the sensor to the board came soldered on. If your board looks like this
 ![complete](/intel_arduino_blog/images/complete_v2.jpg)
 
 Note, I have the 3 wire version of the PT100 so my soldering is done accordingly.
