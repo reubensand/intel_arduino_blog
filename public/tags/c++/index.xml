@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>C&#43;&#43; on </title>
-    <link>http://localhost:1313/intel_arduino_blog/tags/c&#43;&#43;/</link>
+    <link>//localhost:1313/tags/c&#43;&#43;/</link>
     <description>Recent content in C&#43;&#43; on </description>
     <generator>Hugo</generator>
     <language>en-us</language>
     <lastBuildDate>Mon, 15 Jul 2024 15:33:16 -0700</lastBuildDate>
-    <atom:link href="http://localhost:1313/intel_arduino_blog/tags/c++/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="//localhost:1313/tags/c++/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Liquid Level Controller</title>
-      <link>http://localhost:1313/intel_arduino_blog/posts/liquid_level/</link>
+      <link>//localhost:1313/posts/liquid_level/</link>
       <pubDate>Mon, 15 Jul 2024 15:33:16 -0700</pubDate>
-      <guid>http://localhost:1313/intel_arduino_blog/posts/liquid_level/</guid>
+      <guid>//localhost:1313/posts/liquid_level/</guid>
       <description>Abstract Create a simple water level control system designed to maintain a consistent water level in a tank using a comibation of hardware and software. Water leaves the tank through a hole at the bottom, and a pump with variable flow rate replenishs it. Other disturbances to the level, such as water being poured in, should also be handled. To do this a liquied level sensor constantly monitors the water level.</description>
     </item>
   </channel>

@@ -1,4 +1,4 @@
-baseURL = "https://reubensand.github.io/intel_arduino_blog/"
+baseURL = ""
 languageCode = "en-us"
 theme = "typo"
 
@@ -32,11 +32,11 @@ url = "https://github.com/reubensand"
 
 [[params.menu]]
 name = "home"
-url = "/intel_arduino_blog/"
+url = "/"
 
 [[params.menu]]
 name = "posts"
-url = "/intel_arduino_blog/posts"
+url = "/posts"
 
 # Syntax highligth on code blocks
 [markup]

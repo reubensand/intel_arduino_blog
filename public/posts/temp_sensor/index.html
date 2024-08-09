@@ -2,7 +2,7 @@
 <html lang="en-us"
   dir="ltr">
 
-  <head><script src="/intel_arduino_blog/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=intel_arduino_blog/livereload" data-no-instant defer></script>
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width"><meta name="description" content="" />
 
@@ -12,6 +12,7 @@
     
 </title>
 
+<link rel="canonical" href="//localhost:1313/posts/temp_sensor/" />
 
 
 
@@ -23,7 +24,9 @@
 
 
 
-<link rel="stylesheet" href="/intel_arduino_blog/assets/combined.min.1ddff9327769427ec3c5a9b8c4457be6d1be407395881ad400dd674e4dc37aaf.css" media="all">
+
+<link rel="stylesheet" href="/assets/combined.min.1ddff9327769427ec3c5a9b8c4457be6d1be407395881ad400dd674e4dc37aaf.css" media="all">
+
 
 
 
@@ -53,7 +56,7 @@
         
         
         <p class="small ">
-            <a href="/intel_arduino_blog/">
+            <a href="/">
                 /home
             </a>
         </p>
@@ -182,9 +185,9 @@
 </figure></p>
 <p>There are three jump pads that could be configured, we need to do the following:</p>
 <ul>
-<li>Solder closed the jumper labeled <strong>2/3 Wire</strong></li>
-<li>Leave jumper labeled <strong>2 Wire</strong> untouched</li>
-<li>Cut the small tab just to the right of the <em>4</em> on the pad labeled &ldquo;24 3&rdquo;, then solder the rigthmost and middle pads closed.</li>
+<li><span style="color: red">Solder closed the jumper labeled 2/3 Wire </span></li>
+<li><span style="color: green">Leave jumper labeled 2 Wire untouched </span></li>
+<li><span style="color: purple">Cut the small tab just to the right of the _4_ on the pad labeled "24 3", then solder the rigthmost and middle pads closed.</span></li>
 </ul>
 <p>Tips for 3 pad jumper:</p>
 <ul>
@@ -193,8 +196,6 @@
 <li>My first time trying to get the solder to lay correctly took quite a bit of trial and error, but just be careful to not overheat the chip</li>
 </ul>
 <h1 id="board-assembly">Board Assembly</h1>
-<p><strong>Let&rsquo;s add the parts to the board</strong>
-The header strip is easiest to solder in using a breadboard. Be sure to insert the <strong>long pins down</strong>.</p>
 <p>
 
 
@@ -214,28 +215,6 @@ The header strip is easiest to solder in using a breadboard. Be sure to insert t
 
     
 </figure></p>
-<p>
-
-
-
-
-
-
-
-
-
-
-<figure class="">
-
-    <div>
-        <img loading="lazy" alt="complete" src=" /intel_arduino_blog/images/complete_v2.jpg">
-    </div>
-
-    
-</figure></p>
-<p>Note, I have the 3 wire version of the PT100 so my soldering is done accordingly.
-(You can also see how I originally messed up the &ldquo;24 3&rdquo; pad, but after some cutting and resoldering, it works!)</p>
-<h1 id="wires">Wires</h1>
 <p>Why have the extra wire or two? Improved accuracy. In order to obtain very precise readings of low resistance, the resistance of the wire connecting the piece of platinum to the board must also be accounted for, since it could be a couple ohms, resulting in up to a degree celsius change. By having that extra wire, we can measure the resistance of the leads and subtract that from our total measured resistance. If you want more information Omega has a good explanation <a href="https://www.omega.com/en-us/resources/rtd-2-3-4-wire-connections">here.</a></p>
 <p>
 
