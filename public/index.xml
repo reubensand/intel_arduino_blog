@@ -2,24 +2,24 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Home on </title>
-    <link>//localhost:1313/</link>
+    <link>http://localhost:1313/intel_arduino_blog/</link>
     <description>Recent content in Home on </description>
     <generator>Hugo</generator>
     <language>en-us</language>
     <lastBuildDate>Thu, 25 Jul 2024 10:58:28 -0700</lastBuildDate>
-    <atom:link href="//localhost:1313/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://localhost:1313/intel_arduino_blog/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>How to Measure Temperature Using An Arduino and RTD</title>
-      <link>//localhost:1313/posts/temp_sensor/</link>
+      <link>http://localhost:1313/intel_arduino_blog/posts/temp_sensor/</link>
       <pubDate>Thu, 25 Jul 2024 10:58:28 -0700</pubDate>
-      <guid>//localhost:1313/posts/temp_sensor/</guid>
-      <description>// Insert Top level image&#xA;What is an RTD A Resistance Temperature Dectector (RTD) is a simple sensor whose resistance changes as its temperature changes. The RTD we will be using today is the PT100, from a well respected hardware company, Adafruit. The PT indicates that the &amp;ldquo;resistor&amp;rdquo; inside is just a small strip of platinum, and the 100 indicates at 0 degrees celsius the platinum will have a resistance of 100 ohms.</description>
+      <guid>http://localhost:1313/intel_arduino_blog/posts/temp_sensor/</guid>
+      <description>// Insert Top level image&#xA;What is an RTD // insert RTD picture&#xA;A Resistance Temperature Dectector (RTD) is a sensor whose resistance changes as its temperature changes. The RTD we will be using today is the PT100, from hardware company, Adafruit. The PT indicates that the &amp;ldquo;resistor&amp;rdquo; inside is just a small strip of platinum, and the 100 indicates at 0 degrees celsius the platinum will have a resistance of 100 Ohms.</description>
     </item>
     <item>
       <title>Liquid Level Controller</title>
-      <link>//localhost:1313/posts/liquid_level/</link>
+      <link>http://localhost:1313/intel_arduino_blog/posts/liquid_level/</link>
       <pubDate>Mon, 15 Jul 2024 15:33:16 -0700</pubDate>
-      <guid>//localhost:1313/posts/liquid_level/</guid>
+      <guid>http://localhost:1313/intel_arduino_blog/posts/liquid_level/</guid>
       <description>Abstract Create a simple water level control system designed to maintain a consistent water level in a tank using a comibation of hardware and software. Water leaves the tank through a hole at the bottom, and a pump with variable flow rate replenishs it. Other disturbances to the level, such as water being poured in, should also be handled. To do this a liquied level sensor constantly monitors the water level.</description>
     </item>
   </channel>

@@ -1,4 +1,4 @@
-baseURL = ""
+baseURL = "https://reubensand.github.io/intel_arduino_blog/"
 languageCode = "en-us"
 theme = "typo"
 
@@ -32,25 +32,22 @@ url = "https://github.com/reubensand"
 
 [[params.menu]]
 name = "home"
-url = "/"
+url = "/intel_arduino_blog/"
 
 [[params.menu]]
 name = "posts"
-url = "/posts"
+url = "/intel_arduino_blog/posts"
 
 # Syntax highligth on code blocks
 [markup]
 [markup.highlight]
-style = 'arduino'
+style = 'friendly'
 noClasses = true
 guessSyntax = false
-lineNos = true
+lineNos = false
 lineNoStart = 1
 lineNumbersInTable = true
 tabWidth = 4
-
-
-
 
 # Giscus comments
 [params.giscus]

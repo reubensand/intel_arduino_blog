@@ -2,7 +2,7 @@
 <html lang="en-us"
   dir="ltr">
 
-  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <head><script src="/intel_arduino_blog/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=intel_arduino_blog/livereload" data-no-instant defer></script>
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width"><meta name="description" content="" />
 
@@ -12,7 +12,7 @@
     
 </title>
 
-<link rel="canonical" href="//localhost:1313/posts/liquid_level/" />
+<link rel="canonical" href="http://localhost:1313/intel_arduino_blog/posts/liquid_level/" />
 
 
 
@@ -25,7 +25,7 @@
 
 
 
-<link rel="stylesheet" href="/assets/combined.min.1ddff9327769427ec3c5a9b8c4457be6d1be407395881ad400dd674e4dc37aaf.css" media="all">
+<link rel="stylesheet" href="/intel_arduino_blog/assets/combined.min.1ddff9327769427ec3c5a9b8c4457be6d1be407395881ad400dd674e4dc37aaf.css" media="all">
 
 
 
@@ -56,7 +56,7 @@
         
         
         <p class="small ">
-            <a href="/">
+            <a href="/intel_arduino_blog/">
                 /home
             </a>
         </p>
@@ -119,12 +119,12 @@
   <div class="single-tags">
     
     <span>
-      <a href="//localhost:1313/tags/arduino/">#Arduino</a>
+      <a href="http://localhost:1313/intel_arduino_blog/tags/arduino/">#Arduino</a>
     </span>
     
     
     <span>
-      <a href="//localhost:1313/tags/c&#43;&#43;/">#C&#43;&#43;</a>
+      <a href="http://localhost:1313/intel_arduino_blog/tags/c&#43;&#43;/">#C&#43;&#43;</a>
     </span>
     
     
@@ -156,151 +156,64 @@ below the setpoint and decreases the flow rate if it is above.</p>
 <h2 id="the-code">The code</h2>
 <p>All arduino programs (called sketches) have two functions: a <code>setup() </code>, which runs once to <em>setup</em> variables and and a <code>loop()</code>, which does precisely what its name suggests, and <em>loops</em> consecutively. Code outside those two functions will be just like any other C/C++ program, but to keep it simple we just used it to include libraries, initalize global variables and instantiate classes. Check out more infomation on basic Arduino sketches and load other of information <a href="https://docs.arduino.cc/learn/programming/sketches/">here</a>.</p>
 <p>Let&rsquo;s get started! We&rsquo;ll work from top to bottom to avoid jumping around.</p>
-<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
-<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
-</span></code></pre></td>
-<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span>    <span style="color:#728e00">#include</span> <span style="color:#728e00">&lt;PID_v1.h&gt;</span><span style="color:#728e00">
-</span></span></span><span style="display:flex;"><span><span style="color:#728e00"></span>
-</span></span><span style="display:flex;"><span>    <span style="color:#00979d">double</span> <span style="color:#434f54">sensorValue</span>;
-</span></span><span style="display:flex;"><span>    <span style="color:#00979d">double</span> <span style="color:#434f54">output</span>;
-</span></span><span style="display:flex;"><span>    <span style="color:#434f54">String</span> <span style="color:#434f54">input</span>;
-</span></span><span style="display:flex;"><span>    <span style="color:#00979d">int</span> <span style="color:#434f54">outputPin</span> <span style="color:#728e00">=</span> <span style="color:#8a7b52">3</span>; <span style="color:#95a5a6">//Digital output PMW pin connection
-</span></span></span><span style="display:flex;"><span><span style="color:#95a5a6"></span>    <span style="color:#00979d">int</span> <span style="color:#434f54">sensorPin</span> <span style="color:#728e00">=</span> <span style="color:#434f54">A0</span>; <span style="color:#95a5a6">//Analog sensor pin connection
-</span></span></span></code></pre></td></tr></table>
-</div>
-</div><p>First we include the PID library, which will do all the PID related calculations for us. Then, we need to declare some variables: two <a href="https://www.programiz.com/cpp-programming/float-double">doubles</a> to store the reading the level sensor outputs and what the PWM should be set to, a string to hold any input to the serial monitor, and two integers to label the physical pins in a descriptive way.</p>
-<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
-<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
-</span></code></pre></td>
-<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span>    <span style="color:#00979d">double</span> <span style="color:#434f54">Kp</span> <span style="color:#728e00">=</span> <span style="color:#8a7b52">50</span>; <span style="color:#95a5a6">//Proportional Gain
-</span></span></span><span style="display:flex;"><span><span style="color:#95a5a6"></span>    <span style="color:#00979d">double</span> <span style="color:#434f54">Ki</span> <span style="color:#728e00">=</span> <span style="color:#8a7b52">1</span>; <span style="color:#95a5a6">//Integral Constant
-</span></span></span><span style="display:flex;"><span><span style="color:#95a5a6"></span>    <span style="color:#00979d">double</span> <span style="color:#434f54">Kd</span> <span style="color:#728e00">=</span> <span style="color:#8a7b52">0</span>; <span style="color:#95a5a6">//Derivative Constant
-</span></span></span><span style="display:flex;"><span><span style="color:#95a5a6"></span>    <span style="color:#00979d">double</span> <span style="color:#434f54">level</span> <span style="color:#728e00">=</span> <span style="color:#8a7b52">6</span>; <span style="color:#95a5a6">//Set Point (3-12 cm)
-</span></span></span><span style="display:flex;"><span><span style="color:#95a5a6"></span>
-</span></span><span style="display:flex;"><span>    <span style="color:#00979d">double</span> <span style="color:#434f54">setPoint</span> <span style="color:#728e00">=</span> <span style="color:#8a7b52">19.5</span> <span style="color:#a61717">\</span><span style="color:#728e00">*</span> (<span style="color:#434f54">level</span>) <span style="color:#728e00">+</span> <span style="color:#8a7b52">462</span>; <span style="color:#95a5a6">//Internal setPoint
-</span></span></span><span style="display:flex;"><span><span style="color:#95a5a6"></span>    <span style="color:#434f54">PID</span> <span style="color:#d35400">myPID</span>(<span style="color:#728e00">&amp;</span><span style="color:#434f54">sensorValue</span>, <span style="color:#728e00">&amp;</span><span style="color:#434f54">output</span>, <span style="color:#728e00">&amp;</span><span style="color:#434f54">setPoint</span>, <span style="color:#434f54">Kp</span>, <span style="color:#434f54">Ki</span>, <span style="color:#434f54">Kd</span>, <span style="color:#434f54">DIRECT</span>);
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>Next we declare and initalize the 3 PID parameters: proptional gain (Kp), integral constant (Ki), and derivative constant (Kd). We also need to store the level we want the water to remain, which requires a conversion to express the desired water level to units that match the level sensor’s output. Last we instantiate (create) an object of the PID class and include the variables we created as arguments, making sure to pass the address of the <code>sensorValue</code>, <code>output</code> and <code>setPoint</code>.</p>
-<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
-<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
-</span></code></pre></td>
-<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span>    <span style="color:#00979d">void</span> <span style="color:#d35400">setup</span> (){
-</span></span><span style="display:flex;"><span>    <span style="color:#434f54">Serial</span>.<span style="color:#434f54">begin</span>(<span style="color:#8a7b52">9600</span>);
-</span></span><span style="display:flex;"><span>    <span style="color:#434f54">pinMode</span>(<span style="color:#434f54">outputPin</span>, <span style="color:#434f54">OUTPUT</span>);
-</span></span><span style="display:flex;"><span>    <span style="color:#434f54">pinMode</span>(<span style="color:#434f54">sensorPin</span>, <span style="color:#434f54">INPUT</span>);
-</span></span><span style="display:flex;"><span>    <span style="color:#434f54">myPID</span>.<span style="color:#434f54">SetMode</span>(<span style="color:#434f54">AUTOMATIC</span>);
-</span></span><span style="display:flex;"><span>    <span style="color:#434f54">myPID</span>.<span style="color:#434f54">SetOutputLimits</span>(<span style="color:#8a7b52">128</span>,<span style="color:#8a7b52">255</span>);
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span>    <span style="color:#007020">#include</span> <span style="color:#007020">&lt;PID_v1.h&gt;</span><span style="color:#007020">
+</span></span></span><span style="display:flex;"><span><span style="color:#007020"></span>
+</span></span><span style="display:flex;"><span>    <span style="color:#902000">double</span> sensorValue;
+</span></span><span style="display:flex;"><span>    <span style="color:#902000">double</span> output;
+</span></span><span style="display:flex;"><span>    String input;
+</span></span><span style="display:flex;"><span>    <span style="color:#902000">int</span> outputPin <span style="color:#666">=</span> <span style="color:#40a070">3</span>; <span style="color:#60a0b0;font-style:italic">//Digital output PMW pin connection
+</span></span></span><span style="display:flex;"><span><span style="color:#60a0b0;font-style:italic"></span>    <span style="color:#902000">int</span> sensorPin <span style="color:#666">=</span> A0; <span style="color:#60a0b0;font-style:italic">//Analog sensor pin connection
+</span></span></span></code></pre></div><p>First we include the PID library, which will do all the PID related calculations for us. Then, we need to declare some variables: two <a href="https://www.programiz.com/cpp-programming/float-double">doubles</a> to store the reading the level sensor outputs and what the PWM should be set to, a string to hold any input to the serial monitor, and two integers to label the physical pins in a descriptive way.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span>    <span style="color:#902000">double</span> Kp <span style="color:#666">=</span> <span style="color:#40a070">50</span>; <span style="color:#60a0b0;font-style:italic">//Proportional Gain
+</span></span></span><span style="display:flex;"><span><span style="color:#60a0b0;font-style:italic"></span>    <span style="color:#902000">double</span> Ki <span style="color:#666">=</span> <span style="color:#40a070">1</span>; <span style="color:#60a0b0;font-style:italic">//Integral Constant
+</span></span></span><span style="display:flex;"><span><span style="color:#60a0b0;font-style:italic"></span>    <span style="color:#902000">double</span> Kd <span style="color:#666">=</span> <span style="color:#40a070">0</span>; <span style="color:#60a0b0;font-style:italic">//Derivative Constant
+</span></span></span><span style="display:flex;"><span><span style="color:#60a0b0;font-style:italic"></span>    <span style="color:#902000">double</span> level <span style="color:#666">=</span> <span style="color:#40a070">6</span>; <span style="color:#60a0b0;font-style:italic">//Set Point (3-12 cm)
+</span></span></span><span style="display:flex;"><span><span style="color:#60a0b0;font-style:italic"></span>
+</span></span><span style="display:flex;"><span>    <span style="color:#902000">double</span> setPoint <span style="color:#666">=</span> <span style="color:#40a070">19.5</span> <span style="">\</span><span style="color:#666">*</span> (level) <span style="color:#666">+</span> <span style="color:#40a070">462</span>; <span style="color:#60a0b0;font-style:italic">//Internal setPoint
+</span></span></span><span style="display:flex;"><span><span style="color:#60a0b0;font-style:italic"></span>    PID <span style="color:#06287e">myPID</span>(<span style="color:#666">&amp;</span>sensorValue, <span style="color:#666">&amp;</span>output, <span style="color:#666">&amp;</span>setPoint, Kp, Ki, Kd, DIRECT);
+</span></span></code></pre></div><p>Next we declare and initalize the 3 PID parameters: proptional gain (Kp), integral constant (Ki), and derivative constant (Kd). We also need to store the level we want the water to remain, which requires a conversion to express the desired water level to units that match the level sensor’s output. Last we instantiate (create) an object of the PID class and include the variables we created as arguments, making sure to pass the address of the <code>sensorValue</code>, <code>output</code> and <code>setPoint</code>.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span>    <span style="color:#902000">void</span> <span style="color:#06287e">setup</span> (){
+</span></span><span style="display:flex;"><span>    Serial.begin(<span style="color:#40a070">9600</span>);
+</span></span><span style="display:flex;"><span>    pinMode(outputPin, OUTPUT);
+</span></span><span style="display:flex;"><span>    pinMode(sensorPin, INPUT);
+</span></span><span style="display:flex;"><span>    myPID.SetMode(AUTOMATIC);
+</span></span><span style="display:flex;"><span>    myPID.SetOutputLimits(<span style="color:#40a070">128</span>,<span style="color:#40a070">255</span>);
 </span></span><span style="display:flex;"><span>    }
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>Our setup function only requires a few things. We need to start the serial monitor so we can visualize data, such as the current water level, and input our desired level. Then we can use the standard pinMode function to tell the Arduino whether the pin should be reading data or writing data.Using the variables from earlier, we set the <code>outputPin</code> as output and the <code>sensorPin</code> as input. We also want to tell the PID class to adjust our output automatically (line 5). The limits of the PID&rsquo;s output need to correspond with a PWM signal, which ranges from 0 to 255. Here, the lower bound is 128 not 0 because the pump motor won’t turn on under that value, and since water is constantly leaving the cup, the pump should always be on. If you use a different pump, runs some simple tests to see the lower signal your pump can recieve.</p>
+</span></span></code></pre></div><p>Our setup function only requires a few things. We need to start the serial monitor so we can visualize data, such as the current water level, and input our desired level. Then we can use the standard pinMode function to tell the Arduino whether the pin should be reading data or writing data.Using the variables from earlier, we set the <code>outputPin</code> as output and the <code>sensorPin</code> as input. We also want to tell the PID class to adjust our output automatically (line 5). The limits of the PID&rsquo;s output need to correspond with a PWM signal, which ranges from 0 to 255. Here, the lower bound is 128 not 0 because the pump motor won’t turn on under that value, and since water is constantly leaving the cup, the pump should always be on. If you use a different pump, runs some simple tests to see the lower signal your pump can recieve.</p>
 <p>Now to the bulk of the program, the <strong><code>loop()</code></strong> function.</p>
-<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
-<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
-</span></code></pre></td>
-<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span>    <span style="color:#00979d">void</span> <span style="color:#d35400">loop</span> (){
-</span></span><span style="display:flex;"><span>    <span style="color:#95a5a6">/*---------------PID Control---------------*/</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#434f54">sensorValue</span> <span style="color:#728e00">=</span> <span style="color:#434f54">analogRead</span>(<span style="color:#434f54">sensorPin</span>); <span style="color:#95a5a6">//Read the value from the sensor
-</span></span></span><span style="display:flex;"><span><span style="color:#95a5a6"></span>    <span style="color:#434f54">myPID</span>.<span style="color:#434f54">Compute</span>(); <span style="color:#95a5a6">//PID computes output PWM
-</span></span></span><span style="display:flex;"><span><span style="color:#95a5a6"></span>    <span style="color:#434f54">analogWrite</span>(<span style="color:#434f54">outputPin</span>, <span style="color:#434f54">output</span>); <span style="color:#95a5a6">//Update PWM output value
-</span></span></span><span style="display:flex;"><span><span style="color:#95a5a6"></span>    <span style="color:#434f54">level</span> <span style="color:#728e00">=</span> (<span style="color:#434f54">sensorValue</span> <span style="color:#728e00">-</span> <span style="color:#8a7b52">462</span>) <span style="color:#728e00">/</span> <span style="color:#8a7b52">19.5</span>; <span style="color:#95a5a6">//Convert sensor value to liquid level
-</span></span></span></code></pre></td></tr></table>
-</div>
-</div><p>At the start of the loop, we first read the value from the level sensor; the standard <code>analogRead()</code> accomplishes this. Then, the PID class computes the desired output; remember since we passed certain <a href="https://www.geeksforgeeks.org/cpp-functions-pass-by-reference/">arguments by reference</a> and set the mode to automatic, we don’t need to pass them into the compute function, their values will automatically be changed by the class. We can then use yet another standard function <code>analogWrite()</code> to send the PID’s output as a PWN singal to the pump. Last, we convert the level of the water from the level sensor scale back into units of cm, so we can print it out.</p>
-<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
-<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
-</span></code></pre></td>
-<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span>        <span style="color:#95a5a6">/*---------------Input Setpoint---------------*/</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#95a5a6">//read and trim from serial input
-</span></span></span><span style="display:flex;"><span><span style="color:#95a5a6"></span>        <span style="color:#434f54">input</span> <span style="color:#728e00">=</span> <span style="color:#434f54">Serial</span>.<span style="color:#434f54">readString</span>();
-</span></span><span style="display:flex;"><span>        <span style="color:#434f54">input</span>.<span style="color:#434f54">trim</span>();
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span>    <span style="color:#902000">void</span> <span style="color:#06287e">loop</span> (){
+</span></span><span style="display:flex;"><span>    <span style="color:#60a0b0;font-style:italic">/*---------------PID Control---------------*/</span>
+</span></span><span style="display:flex;"><span>    sensorValue <span style="color:#666">=</span> analogRead(sensorPin); <span style="color:#60a0b0;font-style:italic">//Read the value from the sensor
+</span></span></span><span style="display:flex;"><span><span style="color:#60a0b0;font-style:italic"></span>    myPID.Compute(); <span style="color:#60a0b0;font-style:italic">//PID computes output PWM
+</span></span></span><span style="display:flex;"><span><span style="color:#60a0b0;font-style:italic"></span>    analogWrite(outputPin, output); <span style="color:#60a0b0;font-style:italic">//Update PWM output value
+</span></span></span><span style="display:flex;"><span><span style="color:#60a0b0;font-style:italic"></span>    level <span style="color:#666">=</span> (sensorValue <span style="color:#666">-</span> <span style="color:#40a070">462</span>) <span style="color:#666">/</span> <span style="color:#40a070">19.5</span>; <span style="color:#60a0b0;font-style:italic">//Convert sensor value to liquid level
+</span></span></span></code></pre></div><p>At the start of the loop, we first read the value from the level sensor; the standard <code>analogRead()</code> accomplishes this. Then, the PID class computes the desired output; remember since we passed certain <a href="https://www.geeksforgeeks.org/cpp-functions-pass-by-reference/">arguments by reference</a> and set the mode to automatic, we don’t need to pass them into the compute function, their values will automatically be changed by the class. We can then use yet another standard function <code>analogWrite()</code> to send the PID’s output as a PWN singal to the pump. Last, we convert the level of the water from the level sensor scale back into units of cm, so we can print it out.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span>        <span style="color:#60a0b0;font-style:italic">/*---------------Input Setpoint---------------*/</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#60a0b0;font-style:italic">//read and trim from serial input
+</span></span></span><span style="display:flex;"><span><span style="color:#60a0b0;font-style:italic"></span>        input <span style="color:#666">=</span> Serial.readString();
+</span></span><span style="display:flex;"><span>        input.trim();
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        <span style="color:#95a5a6">//set value for setpoint
-</span></span></span><span style="display:flex;"><span><span style="color:#95a5a6"></span>        <span style="color:#728e00">if</span>(<span style="color:#434f54">input</span>.<span style="color:#434f54">toFloat</span>()){
-</span></span><span style="display:flex;"><span>            <span style="color:#728e00">if</span>(<span style="color:#434f54">input</span>.<span style="color:#434f54">toFloat</span>() <span style="color:#728e00">&gt;=</span> <span style="color:#8a7b52">3</span> <span style="color:#728e00">&amp;&amp;</span> <span style="color:#434f54">input</span>.<span style="color:#434f54">toFloat</span>() <span style="color:#728e00">&lt;=</span> <span style="color:#8a7b52">12</span>){
-</span></span><span style="display:flex;"><span>                <span style="color:#434f54">setPoint</span> <span style="color:#728e00">=</span> <span style="color:#8a7b52">19.5</span> <span style="color:#728e00">*</span> (<span style="color:#434f54">input</span>.<span style="color:#434f54">toFloat</span>()) <span style="color:#728e00">+</span> <span style="color:#8a7b52">462</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#60a0b0;font-style:italic">//set value for setpoint
+</span></span></span><span style="display:flex;"><span><span style="color:#60a0b0;font-style:italic"></span>        <span style="color:#007020;font-weight:bold">if</span>(input.toFloat()){
+</span></span><span style="display:flex;"><span>            <span style="color:#007020;font-weight:bold">if</span>(input.toFloat() <span style="color:#666">&gt;=</span> <span style="color:#40a070">3</span> <span style="color:#666">&amp;&amp;</span> input.toFloat() <span style="color:#666">&lt;=</span> <span style="color:#40a070">12</span>){
+</span></span><span style="display:flex;"><span>                setPoint <span style="color:#666">=</span> <span style="color:#40a070">19.5</span> <span style="color:#666">*</span> (input.toFloat()) <span style="color:#666">+</span> <span style="color:#40a070">462</span>;
 </span></span><span style="display:flex;"><span>            }
 </span></span><span style="display:flex;"><span>        }
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>Next, we need to read any value that might be in the serial monitor, store it in the variable as a string, and trim off any extra spaces. Then, if the input is a float and within the height of the sensor/container, the <code>setPoint</code> is changed to the new level (while converting it into the level sensor&rsquo;s units). Notice how the level <em>only</em> gets changed if the input is a number within the range, this way any other garbage in the serial monitor doesn&rsquo;t mess with the system.</p>
-<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
-<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
-</span></code></pre></td>
-<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span>  <span style="color:#95a5a6">// Print time ms
-</span></span></span><span style="display:flex;"><span><span style="color:#95a5a6"></span>  <span style="color:#434f54">Serial</span>.<span style="color:#434f54">print</span>(<span style="color:#434f54">millis</span>());
-</span></span><span style="display:flex;"><span>  <span style="color:#434f54">Serial</span>.<span style="color:#434f54">print</span>(<span style="color:#7f8c8d">&#34;, &#34;</span>);
+</span></span></code></pre></div><p>Next, we need to read any value that might be in the serial monitor, store it in the variable as a string, and trim off any extra spaces. Then, if the input is a float and within the height of the sensor/container, the <code>setPoint</code> is changed to the new level (while converting it into the level sensor&rsquo;s units). Notice how the level <em>only</em> gets changed if the input is a number within the range, this way any other garbage in the serial monitor doesn&rsquo;t mess with the system.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span>  <span style="color:#60a0b0;font-style:italic">// Print time ms
+</span></span></span><span style="display:flex;"><span><span style="color:#60a0b0;font-style:italic"></span>  Serial.print(millis());
+</span></span><span style="display:flex;"><span>  Serial.print(<span style="color:#4070a0">&#34;, &#34;</span>);
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>  <span style="color:#95a5a6">// Print liquid level in cm
-</span></span></span><span style="display:flex;"><span><span style="color:#95a5a6"></span>  <span style="color:#434f54">Serial</span>.<span style="color:#434f54">print</span>(<span style="color:#434f54">level</span>, <span style="color:#8a7b52">2</span>);
-</span></span><span style="display:flex;"><span>  <span style="color:#434f54">Serial</span>.<span style="color:#434f54">print</span>(<span style="color:#7f8c8d">&#34;, &#34;</span>);
+</span></span><span style="display:flex;"><span>  <span style="color:#60a0b0;font-style:italic">// Print liquid level in cm
+</span></span></span><span style="display:flex;"><span><span style="color:#60a0b0;font-style:italic"></span>  Serial.print(level, <span style="color:#40a070">2</span>);
+</span></span><span style="display:flex;"><span>  Serial.print(<span style="color:#4070a0">&#34;, &#34;</span>);
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>  <span style="color:#95a5a6">// Print PWM value
-</span></span></span><span style="display:flex;"><span><span style="color:#95a5a6"></span>  <span style="color:#434f54">Serial</span>.<span style="color:#434f54">println</span>(<span style="color:#434f54">output</span>);
+</span></span><span style="display:flex;"><span>  <span style="color:#60a0b0;font-style:italic">// Print PWM value
+</span></span></span><span style="display:flex;"><span><span style="color:#60a0b0;font-style:italic"></span>  Serial.println(output);
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>  <span style="color:#434f54">delay</span>(<span style="color:#8a7b52">1000</span>);
+</span></span><span style="display:flex;"><span>  delay(<span style="color:#40a070">1000</span>);
 </span></span><span style="display:flex;"><span>}
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>The last thing we need to implement is printing the data to the serial monitor, so that we can see how the water level and PWN signal are changing with respect to time. Adding things to the serial monitor is made quite convenient with the standard Serial library. We can use
+</span></span></code></pre></div><p>The last thing we need to implement is printing the data to the serial monitor, so that we can see how the water level and PWN signal are changing with respect to time. Adding things to the serial monitor is made quite convenient with the standard Serial library. We can use
 <code>Serial.print()</code> to print the time, a comma, followed by the water level. Here we used commas to seperate the data, but spaces or any other special character work just as well. When printing the final data point, in our case the <code>output</code> variable, using <code>Serial.println()</code> will add a newline character to the end for clean formatting.
 The final line of code (besides the closing bracket) adds a delay of 1000 milliseconds (1 second) in between each loop run because we don&rsquo;t that much data and accuracy for our system to work.</p>
 

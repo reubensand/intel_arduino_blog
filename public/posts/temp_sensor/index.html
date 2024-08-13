@@ -2,7 +2,7 @@
 <html lang="en-us"
   dir="ltr">
 
-  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <head><script src="/intel_arduino_blog/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=intel_arduino_blog/livereload" data-no-instant defer></script>
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width"><meta name="description" content="" />
 
@@ -12,7 +12,7 @@
     
 </title>
 
-<link rel="canonical" href="//localhost:1313/posts/temp_sensor/" />
+<link rel="canonical" href="http://localhost:1313/intel_arduino_blog/posts/temp_sensor/" />
 
 
 
@@ -25,7 +25,7 @@
 
 
 
-<link rel="stylesheet" href="/assets/combined.min.1ddff9327769427ec3c5a9b8c4457be6d1be407395881ad400dd674e4dc37aaf.css" media="all">
+<link rel="stylesheet" href="/intel_arduino_blog/assets/combined.min.1ddff9327769427ec3c5a9b8c4457be6d1be407395881ad400dd674e4dc37aaf.css" media="all">
 
 
 
@@ -56,7 +56,7 @@
         
         
         <p class="small ">
-            <a href="/">
+            <a href="/intel_arduino_blog/">
                 /home
             </a>
         </p>
@@ -124,9 +124,10 @@
   <div class="single-content">
     <p>// Insert Top level image</p>
 <h1 id="what-is-an-rtd">What is an RTD</h1>
-<p>A <em>Resistance Temperature Dectector</em> (RTD) is a simple sensor whose resistance changes as its temperature changes. The RTD we will be using today is the <a href="https://www.adafruit.com/product/3290">PT100</a>, from a well respected hardware company, <em>Adafruit</em>. The <strong>PT</strong> indicates that the &ldquo;resistor&rdquo; inside is just a small strip of platinum, and the <strong>100</strong> indicates at 0 degrees celsius the platinum will have a resistance of 100 ohms. Platinum is used in the resistor because it is stable, provides repeatable results, and boasts a broad temperature range.</p>
 <p>// insert RTD picture</p>
-<p>The method to calculate the resistance of the platinum is slightly more complicated than applying a voltage, measuring the corresponding current, then using Ohm&rsquo;s Law <code>R = V/I</code> to solve for <code>R</code>. Instead, a second reference resistor (RREF) is placed in series with the RTD. A voltage is applied to the pair, and the voltage of each individual resistor is measured. The ratio of these two voltages, which also respresents the ratio of resistance due to the constant current, can be multiplied by the known RREF to obtain the RTD&rsquo;s resistance. This process allows for accurate readings at low resistances, and recognizes small changes in resistance, improving the accuracy significantly. To accomplish this, a separate chip is necessary: Adafruit&rsquo;s <a href="https://www.adafruit.com/product/3328">MAX31865 Amplifier</a>. This amplifier includes the required chip to do the above measurement process, and the peripherals to communicate its reading to the Arduino using Serial Peripheral Interface <a href="https://learn.sparkfun.com/tutorials/serial-peripheral-interface-spi/all">(SPI)</a>. SPI is a standardized way to use the <a href="https://learn.sparkfun.com/tutorials/serial-communication/all">Serial</a> communication method, which makes talking to different external chips simple and customary. To find out more about the amplifier consult the <a href="https://learn.adafruit.com/adafruit-max31865-rtd-pt100-amplifier/downloads">datasheet</a>.</p>
+<p>A <em>Resistance Temperature Dectector</em> (RTD) is a sensor whose resistance changes as its temperature changes. The RTD we will be using today is the <a href="https://www.adafruit.com/product/3290">PT100</a>, from hardware company, <em>Adafruit</em>. The <strong>PT</strong> indicates that the &ldquo;resistor&rdquo; inside is just a small strip of platinum, and the <strong>100</strong> indicates at 0 degrees celsius the platinum will have a resistance of 100 Ohms. Platinum is used in the resistor because it is stable, provides repeatable results, and boasts a broad temperature range. Therefore, to obtain a tempereature reading, one must measure the resistance of the platinum, and perform a calculation to map the resistance to celsius.</p>
+<p>The method to measure the resistance of the platinum is slightly more complicated than applying a voltage, measuring the corresponding current, then using Ohm&rsquo;s Law <code>R = V/I</code> to solve for <code>R</code>. Instead, a second reference resistor (RREF) is placed in series with the RTD. A voltage is applied to the pair, and the voltage of each individual resistor is measured. The ratio of these two voltages, which also respresents the ratio of resistance due to the constant current, can be multiplied by the known RREF to obtain the RTD&rsquo;s resistance. This process allows for accurate readings at low resistances, and recognizes small changes in resistance, improving the accuracy significantly. To accomplish this, a separate chip is necessary: Adafruit&rsquo;s <a href="https://www.adafruit.com/product/3328">MAX31865 Amplifier</a>. This amplifier includes the required chip to do the above measurement process, and the peripherals to communicate its reading to the Arduino using Serial Peripheral Interface <a href="https://learn.sparkfun.com/tutorials/serial-peripheral-interface-spi/all">(SPI)</a>. SPI is a standardized way to use the <a href="https://learn.sparkfun.com/tutorials/serial-communication/all">Serial</a> communication method, which makes talking to different external chips simple and customary. To find out more about the amplifier consult the <a href="https://learn.adafruit.com/adafruit-max31865-rtd-pt100-amplifier/downloads">datasheet</a>.</p>
+<p>One last thing to mention about the RTD is the number of wires. Two wires are necessary to connect the platinum to the amplifier&rsquo;s measuring circuit, so that the process mentioned above can happen. However, since the distance between the amplifier and the platinum is long, we need to account for the resistance (and consequenatial voltage drop) of the wires two. By adding an extra wire to one side, we can measure the voltage drop across the wire and subtract that from the voltage reading we get from the platinum resistance. This explains why the Adafruit&rsquo;s PT100, contains 3 wires for the 1 meter cable.</p>
 <h1 id="pinout">Pinout</h1>
 <p>
 
@@ -142,12 +143,12 @@
 <figure class="">
 
     <div>
-        <img loading="lazy" alt="pinout" src=" /intel_arduino_blog/images/top_down_board.jpg">
+        <img loading="lazy" alt="pinout" src=" /intel_arduino_blog/images/pinout.jpg">
     </div>
 
     
-</figure></p>
-<p>The black box in the middle is the actual chip (also known as an integrated circuit). All the other parts are used to support the chip&rsquo;s functions, such as the reference resistor, labeled <em>RREF</em>.</p>
+</figure>
+The black box in the middle is the actual chip (also known as an integrated circuit). All the other parts are used to support the chip&rsquo;s functions, such as the reference resistor, labeled <em>RREF</em>.</p>
 <h3 id="to-connect-to-an-arduino-we-need-to-use-the-following-pins">To connect to an Arduino we need to use the following pins:</h3>
 <h4 id="power-pins">Power Pins</h4>
 <ul>
@@ -161,9 +162,9 @@
 <li>SDI: <strong>S</strong>erial <strong>D</strong>ata <strong>I</strong>n, also known as Microcontroller Out Sensor In, used for data sent from the <em>Arduino</em> to the <em>amplifier</em></li>
 <li>CS: <strong>C</strong>hip <strong>S</strong>elect, when low the amplifier is active</li>
 </ul>
-<p>These 4 pins are the heart of the SPI protocol and are all we need, besides power and ground to communicate between the amplifier and Arduino.</p>
+<p>There are two other pins on the amplifier <em>3V3</em> and <em>ROY</em> aren&rsquo;t necessary for the basic operation of the PT100 tempereature sensor.</p>
 <h1 id="configuring-the-board">Configuring the board</h1>
-<p>By default the board is set up for the 4 wire sensor. Since our PT100 only has 3 wires, a little soldering is necessary to configure thecircuits correctly. For those unfamiliar with soldering, its purpose is to make electrical connections that are a little more permanat than twisting two wires together. I&rsquo;d recomend looking at a tutorial and practicing on some spare parts before attempting the real board. Here&rsquo;s a guide that might <a href="https://learn.adafruit.com/adafruit-guide-excellent-soldering">help</a>
+<p>By default the board is set up for the 4 wire sensor. Since the PT100 only has 3 wires, a little soldering is necessary to configure thecircuits correctly. For those unfamiliar with soldering, its purpose is to make electrical connections that are a little more permanat than twisting two wires together. I&rsquo;d recomend looking at a tutorial and practicing on some spare parts before attempting the real board. Here&rsquo;s a guide that might <a href="https://learn.adafruit.com/adafruit-guide-excellent-soldering">help</a>
 
 
 
@@ -189,13 +190,36 @@
 <li><span style="color: green">Leave jumper labeled 2 Wire untouched </span></li>
 <li><span style="color: purple">Cut the small tab just to the right of the _4_ on the pad labeled "24 3", then solder the rigthmost and middle pads closed.</span></li>
 </ul>
-<p>Tips for 3 pad jumper:</p>
+<p>Tips for <span style="color: purple"> "24 3" jump pad</span>:</p>
 <ul>
 <li>Cutting the tab can be difficult and does scratch the surrounding area slightly, but the circuit should still work fine</li>
 <li>Use a small amount of solder when connecting the middle and right pads and have a solder sucker ready in case the left pad accidentely gets connected</li>
 <li>My first time trying to get the solder to lay correctly took quite a bit of trial and error, but just be careful to not overheat the chip</li>
 </ul>
 <h1 id="board-assembly">Board Assembly</h1>
+<p>First, let&rsquo;s solder on the header pin, which when placed into a breadboard, will allow us to connect to the Arduino using jumper cables, consistently.
+
+
+
+
+
+
+
+
+
+
+
+<figure class="">
+
+    <div>
+        <img loading="lazy" alt="connector pins" src=" /intel_arduino_blog/images/header-pin.jpg">
+    </div>
+
+    
+</figure>
+(this picture is just to display the header pin)</p>
+<p>You&rsquo;ll want to solder this on to have consistent electrical contacts. I find doing this in a breadboard itself is easiest.
+Place the <strong>long</strong> end into the breadboard holes, then slide the amplifier on top so its resting on the black bumper. Apply a small amount of solder to the top of each pin, and it should be good to go! Here&rsquo;s a picture of mine to reference.</p>
 <p>
 
 
@@ -210,13 +234,15 @@
 <figure class="">
 
     <div>
-        <img loading="lazy" alt="connector pins" src=" /intel_arduino_blog/images/solder_pins.jpg">
+        <img loading="lazy" alt="connector pins done" src=" /intel_arduino_blog/images/complete_v2.jpg">
     </div>
 
     
-</figure></p>
-<p>Why have the extra wire or two? Improved accuracy. In order to obtain very precise readings of low resistance, the resistance of the wire connecting the piece of platinum to the board must also be accounted for, since it could be a couple ohms, resulting in up to a degree celsius change. By having that extra wire, we can measure the resistance of the leads and subtract that from our total measured resistance. If you want more information Omega has a good explanation <a href="https://www.omega.com/en-us/resources/rtd-2-3-4-wire-connections">here.</a></p>
-<p>
+</figure>
+If you zoom in, you see the small amount of solder on the pins, and the <em>correct</em> jumper pads</p>
+<h3 id="attaching-the-rtd">Attaching the RTD</h3>
+<p>Attaching the sensor to the amplifier is simple. There should be two connector pins of matching color (mine are red), which also have a colored wire, and one other colored connector (mine was blue) attached to a metallic colored wire. Loosen the terminal&rsquo;s screws using a 2.4 mm screwdriver or anything you can make work. The connectors are U-shaped and you&rsquo;ll want to have one end of the U inserted into the terminal and the other rest on the bottom of the board so it looks like the connector is straddling the amplifier.
+
 
 
 
@@ -230,21 +256,13 @@
 <figure class="">
 
     <div>
-        <img loading="lazy" alt="wire resistance" src=" /intel_arduino_blog/images/three_wires.jpg">
+        <img loading="lazy" alt="sensor side angle" src=" /intel_arduino_blog/images/sensor_side_angle.jpg">
     </div>
 
     
 </figure></p>
-<p>You can see the difference in resistances between the wires in the 3-wire PT100 configuration.
-For example, if the total measrued resistance is 104 ohms, the 2 ohms would be subtracted to get that the real resistance of the platinum is 102 ohms.</p>
-<h3 id="wiring-it-up">Wiring it Up!</h3>
-<p><strong>4 Wires</strong>
-Typically, the wire that connect together have matching colors, but to double check connect a multimeter to see which ones are actually <em>pairs</em>.
-Then, insert one pair of matching wires into one terminal and the same with the other pair. It doesn&rsquo;t matter which wire of the <em>pair</em> goes on the inside or outside. Use a 2.4 mm flathead screwdriver to</p>
-<p>You should not have soldered any of the jumper so your final board should look similar to this.</p>
-<p><strong>3 Wires</strong>
-Again, check to make sure the matching colors have around a 2 ohm between them. This time insert the <em>matching pair</em> in the right terminal with the <strong>F+</strong> label in between the terminal and the punch hole. The solo wire should be placed in the other terminal, in either slot.</p>
-<p>
+<p>The <strong>matching pair</strong> should go in the right terminal of the amplifier with the <strong>F+</strong> label in between the terminal and the punch hole, it doesn&rsquo;t matter which of the pair goes where. The solo wire should be placed in the other terminal, in either slot. Make sure to tighten screws so that the connection is secure.
+
 
 
 
@@ -258,49 +276,28 @@ Again, check to make sure the matching colors have around a 2 ohm between them. 
 <figure class="">
 
     <div>
-        <img loading="lazy" alt="complete three wire" src=" /intel_arduino_blog/images/three_wired.jpg">
+        <img loading="lazy" alt="sensor attached" src=" /intel_arduino_blog/images/sensor_attached.jpg">
     </div>
 
     
 </figure></p>
-<p>You should have soldered the &ldquo;2/3 Wire&rdquo; jump pad and the right two pads of the jumper with the directly flower to the right.</p>
-<p><strong>2 Wire</strong>
-This is the simplest. Just place both wires in one of the terminal. Then either solder closed the jumpers next to the RTD terminal block or put little wires in the right and left terminal blocks to short them together.</p>
 <h1 id="arduino-connection">Arduino Connection</h1>
-<h3 id="spi-wiring">SPI Wiring</h3>
-<p>On an Arduino board:</p>
+<p>Now let&rsquo;s connect the amplifier to the Arduino. I have an Arduino Uno R4 Minima, which is a basic board, but has all the required pins (4 digital + 5V + GND) Since we soldered the header pin in, we can use a breadboard and male to male <a href="https://www.amazon.com/jumper-wires-male/s?k=jumper+wires+male+to+male">jumper wires</a> to make the connections easy to take disassemble/reassemble.</p>
+<p>Make the following connections:</p>
 <ul>
-<li>Connect <strong>Vin</strong> to the 5V or 3V power pin, for most Arduinos the 5V works well.</li>
-<li>Connect <strong>GND</strong> to a command ground pin, also labeled <strong>GND</strong></li>
+<li>Connect <strong>Vin</strong> to the 5V pin in the power section of the Arduino.</li>
+<li>Connect <strong>GND</strong> to a common ground pin, also labeled <strong>GND</strong></li>
 <li>Connect <strong>CLK</strong> to <strong>Digital #13</strong></li>
 <li>Connect <strong>SDO</strong> to <strong>Digital #12</strong></li>
 <li>Connect <strong>SDI</strong> to <strong>Digital #11</strong></li>
 <li>Connect <strong>CS</strong> to <strong>Digital #10</strong></li>
 </ul>
-<p>Other digital pins can be used, as long as the code reflects the changes. You&rsquo;ll see what I mean when we look at the library.</p>
+<p>Here is my finished product:</p>
+<p>// take a good picture</p>
 <h3 id="download-adafruit_max31865-library">Download Adafruit_MAX31865 Library</h3>
-<p>In the Arduino IDE, open up the library manager:</p>
-<p>
+<p>Now that the hardware is all sorted, lets set up the software!</p>
+<p>On the left bar in the Arduino IDE, click on the Library Manager (looks like books):
 
-
-
-
-
-
-
-
-
-
-<figure class="">
-
-    <div>
-        <img loading="lazy" alt="library manager" src=" /intel_arduino_blog/images/library_manager_menu.png">
-    </div>
-
-    
-</figure></p>
-<p>Search for the Adafruit MAX31865 library:</p>
-<p>
 
 
 
@@ -314,18 +311,38 @@ This is the simplest. Just place both wires in one of the terminal. Then either 
 <figure class="">
 
     <div>
-        <img loading="lazy" alt="search bar" src=" /intel_arduino_blog/images/search_max31865.png">
+        <img loading="lazy" alt="library manager" src=" /intel_arduino_blog/images/library_manager.png">
     </div>
 
     
 </figure></p>
-<p>Click <strong>Install</strong>!</p>
-<p>Alternatively, in Platformio add the following line under the <code>[env:]</code> section of the platformio.ini file:</p>
+<p>Type MAX31865 in the search bar:
+
+
+
+
+
+
+
+
+
+
+
+<figure class="">
+
+    <div>
+        <img loading="lazy" alt="search bar" src=" /intel_arduino_blog/images/search_libraries.png">
+    </div>
+
+    
+</figure></p>
+<p>Click <strong>Install</strong>! (If a pop-up window prompts you, click Install All)</p>
+<p>If you want to use Platformio instead, add the following line under the <code>[env:]</code> section of the <code>platformio.ini</code> file:</p>
 <pre tabindex="0"><code>lib_deps = adafruit/Adafruit MAX31865 library@^1.6.2
 </code></pre><p>This will autmatically install the library for you!</p>
-<h3 id="run-example">Run Example</h3>
-<p>In the Arduino IDE, go to <strong>File-&gt;Examples-&gt;Adaruit MAX31865 library-&gt;max31865</strong>
-The example file should pop up.</p>
+<h3 id="example-run">Example Run</h3>
+<p>The Adafruit library comes with a basic example so let run and explain that!</p>
+<p>To access it in the Arduino IDE, open the <strong>File</strong> menu, hover over <strong>Examples</strong> and scroll till you reach the <strong>Adafruit MAX31865 library</strong>, then click on <strong>max31865</strong>. A new window with the example program should pop up.</p>
 <p>
 
 
@@ -340,13 +357,14 @@ The example file should pop up.</p>
 <figure class="">
 
     <div>
-        <img loading="lazy" alt="load demo" src=" /intel_arduino_blog/images/load_demo.png">
+        <img loading="lazy" alt="load demo" src=" /intel_arduino_blog/images/get_example.png">
     </div>
 
     
 </figure></p>
 <p>The example can also be accessed in Platformio under the following filepath:
-<strong>.pio-&gt;libdeps-&gt;board_name-&gt;Adafruit MAX31865 library-&gt;examples-&gt;max31865-&gt;max31865.ino</strong></p>
+<strong>/.pio/libdeps/board_name/Adafruit MAX31865 library/examples/max31865/max31865.ino</strong>
+where board_name represents the board you set up the project with (mine is uno_r4_minima).</p>
 <p>
 
 
@@ -366,25 +384,92 @@ The example file should pop up.</p>
 
     
 </figure></p>
-<p>You can also download this file [here].</p>
-<p>Right underneath, the instantiation of the class, two <code>#define</code> are made. It&rsquo;s important to change those accordingly based on if you are using the PT100 or PT1000. For the PT100 my section looks like this:</p>
-<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
-<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
-</span></code></pre></td>
-<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#95a5a6">// The value of the Rref resistor. Use 430.0 for PT100 and 4300.0 for PT1000
-</span></span></span><span style="display:flex;"><span><span style="color:#95a5a6"></span><span style="color:#728e00">#define RREF      430.0
-</span></span></span><span style="display:flex;"><span><span style="color:#728e00"></span><span style="color:#95a5a6">// The &#39;nominal&#39; 0-degrees-C resistance of the sensor
-</span></span></span><span style="display:flex;"><span><span style="color:#95a5a6">// 100.0 for PT100, 1000.0 for PT1000
-</span></span></span><span style="display:flex;"><span><span style="color:#95a5a6"></span><span style="color:#728e00">#define RNOMINAL  100.0
-</span></span></span></code></pre></td></tr></table>
-</div>
-</div><p>Now you can upload your code, open the serial monitor, and hopefully your temperature readings will be displayed every second!</p>
+<p>You can also download this file <a href="/intel_arduino_blog/files/max31865.ino">here</a>.
+Now you can upload your code, open the serial monitor, and hopefully your temperature readings will be displayed every second!</p>
+<p>To understand the software better, and to be able to change things based on your use case lets take a look at the code:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#007020">#include</span> <span style="color:#007020">&lt;Adafruit_MAX31865.h&gt;</span><span style="color:#007020">
+</span></span></span><span style="display:flex;"><span><span style="color:#007020"></span>
+</span></span><span style="display:flex;"><span><span style="color:#60a0b0;font-style:italic">// Use software SPI: CS, DI, DO, CLK
+</span></span></span><span style="display:flex;"><span><span style="color:#60a0b0;font-style:italic"></span>Adafruit_MAX31865 thermo <span style="color:#666">=</span> Adafruit_MAX31865(<span style="color:#40a070">10</span>, <span style="color:#40a070">11</span>, <span style="color:#40a070">12</span>, <span style="color:#40a070">13</span>);
+</span></span><span style="display:flex;"><span><span style="color:#60a0b0;font-style:italic">// use hardware SPI, just pass in the CS pin
+</span></span></span><span style="display:flex;"><span><span style="color:#60a0b0;font-style:italic">//Adafruit_MAX31865 thermo = Adafruit_MAX31865(10);
+</span></span></span></code></pre></div><p>Just under the the license text at the top of the program sits the include statement for the library header file, if you have worked with Arduino&rsquo;s before you&rsquo;ll know this is how the library&rsquo;s code gets included. Then, the object that represents the amplifier and RTD, and its called <code>thermo</code>. You&rsquo;ll notice for &ldquo;10, 11, 12, 13&rdquo; pins from eariler, these pins can be changed, as long as the changes are represented in the code and on the board (which pin is which is written in the above commment). The amplifier class also has the ability to deal with SPI built in hardware (mentioned in the comments), but that is not necessary for our current setup.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#60a0b0;font-style:italic">// The value of the Rref resistor. Use 430.0 for PT100 and 4300.0 for PT1000
+</span></span></span><span style="display:flex;"><span><span style="color:#60a0b0;font-style:italic"></span><span style="color:#007020">#define RREF 430.0
+</span></span></span><span style="display:flex;"><span><span style="color:#007020"></span><span style="color:#60a0b0;font-style:italic">// The &#39;nominal&#39; 0-degrees-C resistance of the sensor
+</span></span></span><span style="display:flex;"><span><span style="color:#60a0b0;font-style:italic">// 100.0 for PT100, 1000.0 for PT1000
+</span></span></span><span style="display:flex;"><span><span style="color:#60a0b0;font-style:italic"></span><span style="color:#007020">#define RNOMINAL 100.0
+</span></span></span></code></pre></div><p>Next, two constants have to be defined. For the Adafruit MAX31865, the reference resistor (RREF) mentioned at the beginning is 430.0 Ohms, reflecting  the actual resistor on the amplifier board. Also, since the PT100 is designed to have a resistance of 100 Ohms at 0-degrees, we set our RNOMIAL to 100.0.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#902000">void</span> <span style="color:#06287e">setup</span>()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    Serial.begin(<span style="color:#40a070">115200</span>);
+</span></span><span style="display:flex;"><span>    Serial.println(<span style="color:#4070a0">&#34;Adafruit MAX31865 PT100 Sensor Test!&#34;</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    thermo.begin(MAX31865_3WIRE); <span style="color:#60a0b0;font-style:italic">// set to 2WIRE or 4WIRE as necessary
+</span></span></span><span style="display:flex;"><span><span style="color:#60a0b0;font-style:italic"></span>}
+</span></span></code></pre></div><p>In our setup function, only two things need to happen: the serial monitor needs to be initalized to see the temperature readings, and the <code>thermo</code> object needs to begin the SPI communication. The <code>println()</code> is just to represent a start for outputs.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#902000">void</span> <span style="color:#06287e">loop</span>()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#902000">uint16_t</span> rtd <span style="color:#666">=</span> thermo.readRTD();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    Serial.print(<span style="color:#4070a0">&#34;RTD value: &#34;</span>);
+</span></span><span style="display:flex;"><span>    Serial.println(rtd);
+</span></span><span style="display:flex;"><span>    <span style="color:#902000">float</span> ratio <span style="color:#666">=</span> rtd;
+</span></span><span style="display:flex;"><span>    ratio <span style="color:#666">/=</span> <span style="color:#40a070">32768</span>;
+</span></span><span style="display:flex;"><span>    Serial.print(<span style="color:#4070a0">&#34;Ratio = &#34;</span>);
+</span></span><span style="display:flex;"><span>    Serial.println(ratio, <span style="color:#40a070">8</span>);
+</span></span><span style="display:flex;"><span>    Serial.print(<span style="color:#4070a0">&#34;Resistance = &#34;</span>);
+</span></span><span style="display:flex;"><span>    Serial.println(RREF <span style="color:#666">*</span> ratio, <span style="color:#40a070">8</span>);
+</span></span><span style="display:flex;"><span>    Serial.print(<span style="color:#4070a0">&#34;Temperature = &#34;</span>);
+</span></span><span style="display:flex;"><span>    Serial.println(thermo.temperature(RNOMINAL, RREF));
+</span></span></code></pre></div><p>Here is the main part of the loop! If you remember the explaination of how the resistance is actual measured/calculated, you should recognize the different numbers being printed. First, the ratio of resistance between the platinum and <em>RREF</em> is being read from the amplifier by the <code>thermo</code> object&rsquo;s function <code>readRTD()</code>. That unsigned integer ratio is then normalized to a float ratio between 0 and 1 by dividing by 32768. Then, the resistance of the platinum in Ohms is found by multiplying the normalized ratio by <em>RREF</em>. Last, the calculation between resistance and temperature is done to yield the end goal, tempereature in celsius. All of these values are printed to the serial, right after they are calculated. Notice how for the final temperature calculation, a special <code>thermo.temperature()</code> is called with only two arguments. This means we
+don&rsquo;t actually need to call the <code>readrtd()</code> and do all the calculations because the function already does it internally to get the temperature.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span> <span style="color:#60a0b0;font-style:italic">// Check and print any faults
+</span></span></span><span style="display:flex;"><span><span style="color:#60a0b0;font-style:italic"></span><span style="color:#902000">uint8_t</span> fault <span style="color:#666">=</span> thermo.readFault();
+</span></span><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">if</span> (fault)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    Serial.print(<span style="color:#4070a0">&#34;Fault 0x&#34;</span>);
+</span></span><span style="display:flex;"><span>    Serial.println(fault, HEX);
+</span></span><span style="display:flex;"><span>    <span style="color:#007020;font-weight:bold">if</span> (fault <span style="color:#666">&amp;</span> MAX31865_FAULT_HIGHTHRESH)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        Serial.println(<span style="color:#4070a0">&#34;RTD High Threshold&#34;</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    ...
+</span></span><span style="display:flex;"><span>    <span style="color:#007020;font-weight:bold">if</span> (fault <span style="color:#666">&amp;</span> MAX31865_FAULT_OVUV)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        Serial.println(<span style="color:#4070a0">&#34;Under/Over voltage&#34;</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    thermo.clearFault();
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>This next part just makes use of the faults that the amplifier board is capable of detecting. These are not important unless fatal errors are occuring, so I won&rsquo;t cover them too in depth. Again reference the datasheet for all the information.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span>    Serial.println();
+</span></span><span style="display:flex;"><span>    delay(<span style="color:#40a070">1000</span>);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>To finish off the loop we can print an empty line for clean distinctions between data points, and add a delay to efficiently use the Arduino.
+I would also recommend checking out the <a href="https://github.com/adafruit/Adafruit_MAX31865/">github</a> for the library to see how some of the functions are implemented.</p>
+<p>If you read through this brief explanation thought a lot of this example code isn&rsquo;t super necessary, you are correct. Here&rsquo;s a file with the bare minimum to get a temperature reading every second:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#007020">#include</span> <span style="color:#007020">&lt;Adafruit_MAX31865.h&gt;</span><span style="color:#007020">
+</span></span></span><span style="display:flex;"><span><span style="color:#007020"></span>
+</span></span><span style="display:flex;"><span>Adafruit_MAX31865 thermo <span style="color:#666">=</span> Adafruit_MAX31865(<span style="color:#40a070">10</span>, <span style="color:#40a070">11</span>, <span style="color:#40a070">12</span>, <span style="color:#40a070">13</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#007020">#define RREF 430.0
+</span></span></span><span style="display:flex;"><span><span style="color:#007020">#define RNOMINAL 100.0
+</span></span></span><span style="display:flex;"><span><span style="color:#007020"></span>
+</span></span><span style="display:flex;"><span><span style="color:#902000">void</span> <span style="color:#06287e">setup</span>()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    Serial.begin(<span style="color:#40a070">115200</span>);
+</span></span><span style="display:flex;"><span>    thermo.begin(MAX31865_3WIRE); 
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#902000">void</span> <span style="color:#06287e">loop</span>()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    Serial.print(<span style="color:#4070a0">&#34;Temperature = &#34;</span>);
+</span></span><span style="display:flex;"><span>    Serial.println(thermo.temperature(RNOMINAL, RREF));
+</span></span><span style="display:flex;"><span>    Serial.println();
+</span></span><span style="display:flex;"><span>    delay(<span style="color:#40a070">1000</span>);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>You can use this as the base for a more complicated project involving the PT100.</p>
+<p>That brings us to the end of this tutorial. I hope you found it insightful!</p>
 
     
   </div>
